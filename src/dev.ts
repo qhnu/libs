@@ -1,5 +1,9 @@
 export {}
 
+console.log('dev...')
+
+// TODO:search
+
 // https://github.com/brianreavis/sifter.js
 // import Sifter from 'sifter'
 
