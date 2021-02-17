@@ -1,6 +1,6 @@
 {
   "name": "@qhnu/libs",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog-ja"
@@ -31,12 +31,13 @@
     "@qhnu/ts-template": "^2.0.4"
   },
   "license": "MIT",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "build:dev": "ts-eager src/dev.ts",
+    "build:dist": "rimraf dist/* && tsc -p tsconfig.build.json",
     "commit": "git add -A && cz",
     "fixpack": "fixpack",
     "test:type": "tsc --noEmit",
