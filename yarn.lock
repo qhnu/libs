@@ -634,10 +634,10 @@
   resolved "https://registry.yarnpkg.com/@qhnu/config/-/config-2.0.5.tgz#c45319e8740ff947cba58fa796546a8bb07a6a42"
   integrity sha512-hidg6/KlNeNZZTnR9ogeqUPRP0fT90bELMq/S05zyEnUD+rKSeuHa7eUQk30nVEaozJkDK/tGlSqollB0oPlCg==
 
-"@qhnu/ts-template@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@qhnu/ts-template/-/ts-template-2.0.3.tgz#eaf740b9828f3c0d7cc9d82268abdc2fcfd5a199"
-  integrity sha512-u56zYxo/VMBYB4msDmTARrgrhT8hTK/Wsw/bN7d8ACo5cWDdLWFbuXcdE43bIjFgrF2uyVYT3Wb2KHOF7L2fNw==
+"@qhnu/ts-template@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@qhnu/ts-template/-/ts-template-2.0.4.tgz#7d7e2ee76e2427cde4af1842e1f3b0e87c68da8a"
+  integrity sha512-Ki8TW1egK92G/DoyBkJFTY0X8VaeC687bQVSApXH+WmRdHwplcrkQUrlIh46+Eb1VG/XSBGJH5KQo3rXEDNLug==
   dependencies:
     "@types/jest" "^26.0.20"
     "@types/webpack-env" "^1.16.0"
