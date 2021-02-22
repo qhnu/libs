@@ -17,3 +17,7 @@ console.log('dev...')
 
 // https://fusejs.io/getting-started/installation.html
 // import Fuse from 'fuse.js'
+
+// TODO:img
+
+// croppr
