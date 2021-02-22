@@ -23,15 +23,15 @@ export const downloadFontByStylesheet: (
  * https://developer.mozilla.org/en-US/docs/Web/API/CSS_Font_Loading_API
  */
 
-export interface Font {
-  family: string
+export interface Font<T extends string> {
+  family: T
   source: string | BinaryData
   descriptors?: FontFaceDescriptors
 }
 
-export const downloadFontByBin: (fonts: Font[]) => Promise<void> = async (
-  fonts
-) => {
+export const downloadFontByBin: <T extends string>(
+  fonts: Font<T>[]
+) => Promise<void> = async (fonts) => {
   const promises = []
   for (const font of fonts) {
     const fontFace = new FontFace(font.family, font.source, font.descriptors)
