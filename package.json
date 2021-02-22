@@ -1,6 +1,6 @@
 {
   "name": "@qhnu/libs",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog-ja"
@@ -21,7 +21,7 @@
     "react-hook-form": "^6.15.3",
     "react-loops": "^1.3.0",
     "react-query": "^3.9.8",
-    "react-spring": "^9.0.0-rc.3",
+    "react-spring": "npm:@react-spring/web@9.0.0-rc.3",
     "react-superellipse": "^0.0.6",
     "react-use": "^17.1.1",
     "smooth-scroll-into-view-if-needed": "^1.1.29",
