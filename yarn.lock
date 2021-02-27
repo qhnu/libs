@@ -688,10 +688,10 @@
   resolved "https://registry.yarnpkg.com/@qhnu/config/-/config-2.0.5.tgz#c45319e8740ff947cba58fa796546a8bb07a6a42"
   integrity sha512-hidg6/KlNeNZZTnR9ogeqUPRP0fT90bELMq/S05zyEnUD+rKSeuHa7eUQk30nVEaozJkDK/tGlSqollB0oPlCg==
 
-"@qhnu/ts-template@^2.0.5":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@qhnu/ts-template/-/ts-template-2.0.5.tgz#a7af824591dfa16ca33d4fb2813abd373ba254e4"
-  integrity sha512-vdR+JZMnnhPWuov8gKzPQKllTOxnPdCdeZe8MeyV/zDUnml22SkXvWYAq37ifHrxtzTD7ScRyYDnaTXJF2UgLw==
+"@qhnu/ts-template@^2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@qhnu/ts-template/-/ts-template-2.0.6.tgz#0fb6ea7cc698636eff76787173a30817580e7e52"
+  integrity sha512-IPtOTTUOXbp8iMh2HZBVO/kCdOa602na88vUNMpgufDIbYDXGpHNyTbHhMmcOagwxLrEiU9oNmfZ+BRJ8A+50w==
   dependencies:
     "@types/jest" "^26.0.20"
     "@types/webpack-env" "^1.16.0"
@@ -710,6 +710,7 @@
     lint-staged "^10.5.4"
     next "^10.0.7"
     prettier "^2.0.2"
+    rimraf "^3.0.2"
     ts-eager "^1.1.3"
     typescript "^4.2.2"
 
