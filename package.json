@@ -1,6 +1,6 @@
 {
   "name": "@qhnu/libs",
-  "version": "2.0.13",
+  "version": "2.0.14",
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog-ja"
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@qhnu/config": "^2.0.5",
-    "@qhnu/ts-template": "^2.0.4",
+    "@qhnu/ts-template": "^2.0.5",
     "croppr": "^2.3.1",
     "date-holidays": "^2.0.0",
     "smartcrop": "^2.0.3"
@@ -44,8 +44,7 @@
     "access": "public"
   },
   "scripts": {
-    "build:dev": "ts-eager src/dev.ts",
-    "build:dist": "rimraf dist/* && tsc -p tsconfig.build.json",
+    "build:dev": "ts-eager src/index.ts",
     "commit": "git add -A && cz",
     "fixpack": "fixpack",
     "test:type": "tsc --noEmit",
