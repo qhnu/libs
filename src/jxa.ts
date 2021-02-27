@@ -5,8 +5,8 @@ import { run } from '@jxa/run'
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app'
 const IRIS_PATH = '/Applications/_Video/Iris.app'
 
-export const fetchArgs = async (...args: any) => {
-  return await run((args) => {
+export const fetchArgs = async (args: any) => {
+  return await run((args: any) => {
     const payload = args
     return payload
   }, args)
@@ -45,7 +45,7 @@ export const showUiElementName = async (
 }
 
 export const resizeChrome = async () => {
-  return await run(() => {
+  return await run((CHROME_PATH: string) => {
     const chrome = Application(CHROME_PATH)
     chrome.activate()
 
@@ -66,11 +66,11 @@ export const resizeChrome = async () => {
         break
       }
     }
-  })
+  }, CHROME_PATH)
 }
 
 export const prepareIris = async () => {
-  return await run(() => {
+  return await run((IRIS_PATH: string) => {
     const irisApp = Application(IRIS_PATH)
     if (irisApp.running()) {
       irisApp.quit()
@@ -86,22 +86,22 @@ export const prepareIris = async () => {
       .menus.byName('File')
       .menuItems.byName('New Recording...')
       .click()
-  })
+  }, IRIS_PATH)
 }
 
 export const startRecord = async () => {
-  return await run(() => {
+  return await run((IRIS_PATH: string) => {
     const irisApp = Application(IRIS_PATH)
     const irisEvents = Application('System Events').processes[irisApp.name()]
     irisEvents.windows
       .byName('Settings Window')
       .buttons.byName('Record')
       .click()
-  })
+  }, IRIS_PATH)
 }
 
 export const stopRecord = async () => {
-  return await run(() => {
+  return await run((IRIS_PATH) => {
     const irisApp = Application(IRIS_PATH)
     const irisEvents = Application('System Events').processes[irisApp.name()]
     irisEvents.menuBars
@@ -114,7 +114,7 @@ export const stopRecord = async () => {
     delay(1)
 
     irisApp.quit()
-  })
+  }, IRIS_PATH)
 }
 
 export const sleepOs = async () => {

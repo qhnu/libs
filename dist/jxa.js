@@ -4,7 +4,7 @@ exports.sleepOs = exports.stopRecord = exports.startRecord = exports.prepareIris
 const run_1 = require("@jxa/run");
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app';
 const IRIS_PATH = '/Applications/_Video/Iris.app';
-const fetchArgs = async (...args) => {
+const fetchArgs = async (args) => {
     return await run_1.run((args) => {
         const payload = args;
         return payload;
@@ -38,7 +38,7 @@ const showUiElementName = async (appPath, filters = []) => {
 };
 exports.showUiElementName = showUiElementName;
 const resizeChrome = async () => {
-    return await run_1.run(() => {
+    return await run_1.run((CHROME_PATH) => {
         const chrome = Application(CHROME_PATH);
         chrome.activate();
         let window = null;
@@ -57,11 +57,11 @@ const resizeChrome = async () => {
                 break;
             }
         }
-    });
+    }, CHROME_PATH);
 };
 exports.resizeChrome = resizeChrome;
 const prepareIris = async () => {
-    return await run_1.run(() => {
+    return await run_1.run((IRIS_PATH) => {
         const irisApp = Application(IRIS_PATH);
         if (irisApp.running()) {
             irisApp.quit();
@@ -76,22 +76,22 @@ const prepareIris = async () => {
             .menus.byName('File')
             .menuItems.byName('New Recording...')
             .click();
-    });
+    }, IRIS_PATH);
 };
 exports.prepareIris = prepareIris;
 const startRecord = async () => {
-    return await run_1.run(() => {
+    return await run_1.run((IRIS_PATH) => {
         const irisApp = Application(IRIS_PATH);
         const irisEvents = Application('System Events').processes[irisApp.name()];
         irisEvents.windows
             .byName('Settings Window')
             .buttons.byName('Record')
             .click();
-    });
+    }, IRIS_PATH);
 };
 exports.startRecord = startRecord;
 const stopRecord = async () => {
-    return await run_1.run(() => {
+    return await run_1.run((IRIS_PATH) => {
         const irisApp = Application(IRIS_PATH);
         const irisEvents = Application('System Events').processes[irisApp.name()];
         irisEvents.menuBars
@@ -102,7 +102,7 @@ const stopRecord = async () => {
             .click();
         delay(1);
         irisApp.quit();
-    });
+    }, IRIS_PATH);
 };
 exports.stopRecord = stopRecord;
 const sleepOs = async () => {

@@ -1,4 +1,4 @@
-export declare const fetchArgs: (...args: any) => Promise<unknown>;
+export declare const fetchArgs: (args: any) => Promise<unknown>;
 export declare const showUiElementName: (appPath: string, filters?: string[]) => Promise<unknown>;
 export declare const resizeChrome: () => Promise<unknown>;
 export declare const prepareIris: () => Promise<unknown>;
