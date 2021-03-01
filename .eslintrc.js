@@ -1,1 +1,1 @@
-module.exports = require('@qhnu/config').eslint.node
+module.exports = require('@qhnu/config').eslint.react

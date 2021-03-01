@@ -1,6 +1,6 @@
 {
   "name": "@qhnu/libs",
-  "version": "2.0.16",
+  "version": "2.0.17",
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog-ja"
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@qhnu/config": "^2.0.5",
+    "@qhnu/react-template": "^2.0.7",
     "@qhnu/ts-template": "^2.0.6",
     "croppr": "^2.3.1",
     "date-holidays": "^2.0.0",
