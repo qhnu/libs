@@ -1,6 +1,6 @@
 const rgb2hsl = require('pure-color/convert/rgb2hsl')
 
-// HTMLVideoElementと同比率にしないと、drawImage()で歪む
+// HTMLVideoElementと同比率のContext2Dを作らないと、drawImage()で歪む
 const CANVAS_WIDTH = 1920 / 10
 const CANVAS_HEIGHT = 1080 / 10
 
@@ -92,13 +92,17 @@ const pixelsToRgba = (pixels: Uint8ClampedArray) => {
   return [red, green, blue, alpha]
 }
 
-const captureRange = { x: 0, y: 0, width: 50, height: Math.round(1080 / 5) }
-
 type Hsl = [number, number, number]
 
 export const getBackgroundColor = (
   ctx: Context,
-  videoEl: HTMLVideoElement
+  videoEl: HTMLVideoElement,
+  captureRange: Pick<DOMRect, 'x' | 'y' | 'width' | 'height'> = {
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 50,
+  }
 ): string => {
   drawImage(ctx, videoEl, captureRange)
   const rgba = getRgba(ctx)
@@ -107,5 +111,5 @@ export const getBackgroundColor = (
   h = Math.round(h)
   s = Math.round(s)
   l = Math.round(l)
-  return `hsl(${h},${s - 0.5}%,${l}%)`
+  return `hsl(${h},${s}%,${l}%)`
 }

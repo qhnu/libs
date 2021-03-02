@@ -65,14 +65,18 @@ const pixelsToRgba = (pixels) => {
     alpha = Number(alpha.toFixed(2));
     return [red, green, blue, alpha];
 };
-const captureRange = { x: 0, y: 0, width: 50, height: Math.round(1080 / 5) };
-const getBackgroundColor = (ctx, videoEl) => {
+const getBackgroundColor = (ctx, videoEl, captureRange = {
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 50,
+}) => {
     drawImage(ctx, videoEl, captureRange);
     const rgba = getRgba(ctx);
     let [h, s, l] = rgb2hsl([rgba[0], rgba[1], rgba[2]]);
     h = Math.round(h);
     s = Math.round(s);
     l = Math.round(l);
-    return `hsl(${h},${s - 0.5}%,${l}%)`;
+    return `hsl(${h},${s}%,${l}%)`;
 };
 exports.getBackgroundColor = getBackgroundColor;
