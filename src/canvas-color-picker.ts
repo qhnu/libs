@@ -1,70 +1,13 @@
 const rgb2hsl = require('pure-color/convert/rgb2hsl')
 
-// HTMLVideoElementと同比率のContext2Dを作らないと、drawImage()で歪む
-const CANVAS_WIDTH = 1920 / 10
-const CANVAS_HEIGHT = 1080 / 10
-
-const RGBA_LENGTH = 4
-
 type Context = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D
-
-export const getCanvasContextWithDebugDom = (): Context => {
-  const canvas = document.createElement('canvas')
-  canvas.width = CANVAS_WIDTH
-  canvas.height = CANVAS_HEIGHT
-  debugStyle(canvas)
-
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error()
-  return ctx
-}
-
-const debugStyle = (canvas: HTMLCanvasElement) => {
-  canvas.style.position = 'fixed'
-  canvas.style.zIndex = '9999'
-  canvas.style.left = '10px'
-  canvas.style.bottom = '10px'
-  canvas.style.backgroundColor = 'red'
-}
-
-export const getCanvasContext = (): Context => {
-  const canvas = new OffscreenCanvas(CANVAS_WIDTH, CANVAS_HEIGHT)
-
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error()
-  return ctx
-}
-
 type CaptureRange = Pick<DOMRect, 'x' | 'y' | 'width' | 'height'>
+type Color = [number, number, number] | [number, number, number, number]
 
-const drawImage = (
-  ctx: Context,
-  video: HTMLVideoElement,
-  captureRange: CaptureRange
-): void => {
-  ctx.drawImage(
-    video,
-    captureRange.x,
-    captureRange.y,
-    captureRange.width,
-    captureRange.height,
-    0,
-    0,
-    CANVAS_WIDTH,
-    CANVAS_HEIGHT
-  )
-}
-
-const getRgba = (ctx: Context): [number, number, number, number] => {
-  const imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-  const pixels = imageData.data
-  const [red, green, blue, alpha] = pixelsToRgba(pixels)
-  return [red, green, blue, alpha]
-}
-
-const pixelsToRgba = (pixels: Uint8ClampedArray) => {
+const pixelsToRgba = (pixels: Uint8ClampedArray): Color => {
   let [red, green, blue, alpha] = [0, 0, 0, 0]
 
+  const RGBA_LENGTH = 4
   const pixelCount = pixels.length / RGBA_LENGTH
 
   for (const index of Array(pixelCount).keys()) {
@@ -92,24 +35,70 @@ const pixelsToRgba = (pixels: Uint8ClampedArray) => {
   return [red, green, blue, alpha]
 }
 
-type Hsl = [number, number, number]
-
-export const getBackgroundColor = (
-  ctx: Context,
-  videoEl: HTMLVideoElement,
-  captureRange: Pick<DOMRect, 'x' | 'y' | 'width' | 'height'> = {
-    x: 0,
-    y: 0,
-    width: 50,
-    height: 50,
-  }
-): string => {
-  drawImage(ctx, videoEl, captureRange)
-  const rgba = getRgba(ctx)
-
-  let [h, s, l] = rgb2hsl([rgba[0], rgba[1], rgba[2]]) as Hsl
+const rgbToHsl = (rgb: Color): Color => {
+  let [h, s, l] = rgb2hsl([rgb[0], rgb[1], rgb[2]]) as Color
   h = Math.round(h)
   s = Math.round(s)
   l = Math.round(l)
-  return `hsl(${h},${s}%,${l}%)`
+  return [h, s, l]
+}
+
+export const getCanvasHsl = (
+  ctx: Context,
+  captureRange: CaptureRange
+): Color => {
+  const imageData = ctx.getImageData(
+    captureRange.x,
+    captureRange.y,
+    captureRange.width,
+    captureRange.height
+  )
+
+  const pixels = imageData.data
+  const rgb = pixelsToRgba(pixels)
+  return rgbToHsl(rgb)
+}
+
+// HTMLVideoElementと同比率のContext2Dを作らないと、drawImage()で画素埋めできない
+const VIDEO_CANVAS_WIDTH = 1920 / 10
+const VIDEO_CANVAS_HEIGHT = 1080 / 10
+
+let videoContext: Context | null = null
+
+const getVideoContext = (): Context => {
+  const canvas = new OffscreenCanvas(VIDEO_CANVAS_WIDTH, VIDEO_CANVAS_HEIGHT)
+
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error()
+  return ctx
+}
+
+export const getVideoHsl = (
+  videoEl: HTMLVideoElement,
+  captureRange: CaptureRange
+): Color => {
+  if (!videoContext) videoContext = getVideoContext()
+
+  videoContext.drawImage(
+    videoEl,
+    captureRange.x,
+    captureRange.y,
+    captureRange.width,
+    captureRange.height,
+    0,
+    0,
+    VIDEO_CANVAS_WIDTH,
+    VIDEO_CANVAS_HEIGHT
+  )
+
+  const imageData = videoContext.getImageData(
+    0,
+    0,
+    VIDEO_CANVAS_WIDTH,
+    VIDEO_CANVAS_HEIGHT
+  )
+
+  const pixels = imageData.data
+  const rgb = pixelsToRgba(pixels)
+  return rgbToHsl(rgb)
 }
