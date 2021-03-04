@@ -24,10 +24,7 @@ export class Interval {
 
   seek(seekSeconds: number): void {
     this.stop()
-
     this.totalSeconds = seekSeconds
-    this.callback(seekSeconds)
-
     this.resume()
   }
 

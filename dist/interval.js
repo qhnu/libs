@@ -22,7 +22,6 @@ class Interval {
     seek(seekSeconds) {
         this.stop();
         this.totalSeconds = seekSeconds;
-        this.callback(seekSeconds);
         this.resume();
     }
     stop() {
