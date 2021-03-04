@@ -1,30 +1,32 @@
 export class Interval {
-  intervalSeconds: number
-  intervalMs: number
-  setTimeoutId: NodeJS.Timeout | null = null
+  private totalSeconds = 0
+  private setTimeoutId: NodeJS.Timeout | null = null
 
-  constructor(intervalSeconds: number) {
-    this.intervalSeconds = intervalSeconds
-    this.intervalMs = intervalSeconds * 1000
-  }
-
-  start(callback: (totalSeconds: number) => void, endSeconds: number): void {
+  start(
+    callback: (totalSeconds: number) => void,
+    intervalSeconds: number,
+    endSeconds?: number
+  ): void {
     this.stop()
-    let prev = Date.now() - this.intervalMs
-    let totalSeconds = 0
+
+    const intervalMs = intervalSeconds * 1000
+    let prevCallMs = Date.now() - intervalMs
 
     const callInterval = () => {
-      callback(totalSeconds)
+      callback(this.totalSeconds)
 
-      if (endSeconds <= totalSeconds) return
+      if (endSeconds != null && endSeconds <= this.totalSeconds) {
+        return
+      }
 
-      totalSeconds += this.intervalSeconds
+      this.totalSeconds += intervalSeconds
 
-      const diffMs = Date.now() - prev - this.intervalMs
-      const next = this.intervalMs - diffMs
-      prev = Date.now()
+      const currMs = Date.now()
+      const diffMs = currMs - prevCallMs - intervalMs
+      const nextMs = intervalMs - diffMs
+      prevCallMs = currMs
 
-      this.setTimeoutId = setTimeout(() => callInterval(), next)
+      this.setTimeoutId = setTimeout(() => callInterval(), nextMs)
     }
 
     callInterval()
@@ -32,5 +34,9 @@ export class Interval {
 
   stop(): void {
     if (this.setTimeoutId) clearTimeout(this.setTimeoutId)
+  }
+
+  seek(seekSeconds: number): void {
+    this.totalSeconds = seekSeconds
   }
 }

@@ -1,10 +1,8 @@
-/// <reference types="node" />
 export declare class Interval {
-    intervalSeconds: number;
-    intervalMs: number;
-    setTimeoutId: NodeJS.Timeout | null;
-    constructor(intervalSeconds: number);
-    start(callback: (totalSeconds: number) => void, endSeconds: number): void;
+    private totalSeconds;
+    private setTimeoutId;
+    start(callback: (totalSeconds: number) => void, intervalSeconds: number, endSeconds?: number): void;
     stop(): void;
+    seek(seekSeconds: number): void;
 }
 //# sourceMappingURL=interval.d.ts.map
