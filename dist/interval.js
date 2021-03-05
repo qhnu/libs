@@ -15,8 +15,7 @@ class Interval {
         this.callback = callback;
         this.intervalSeconds = intervalSeconds;
         this.intervalMs = intervalSeconds * 1000;
-        if (endSeconds)
-            this.endSeconds = endSeconds;
+        this.endSeconds = endSeconds ?? 0;
         this.totalSeconds = 0;
         this.setTimeoutId = null;
         this.resume();
@@ -35,7 +34,7 @@ class Interval {
         let prevCallMs = Date.now() - this.intervalMs;
         const callInterval = () => {
             this.callback(this.totalSeconds);
-            if (this.endSeconds <= this.totalSeconds) {
+            if (this.endSeconds > 0 && this.endSeconds <= this.totalSeconds) {
                 return;
             }
             this.totalSeconds += this.intervalSeconds;
