@@ -19,14 +19,13 @@ class Interval {
             this.endSeconds = endSeconds;
         this.resume();
     }
-    seek(seekSeconds) {
-        this.stop();
-        this.totalSeconds = seekSeconds;
-        this.resume();
-    }
     stop() {
         if (this.setTimeoutId)
             clearTimeout(this.setTimeoutId);
+    }
+    seek(seekSeconds) {
+        this.stop();
+        this.totalSeconds = seekSeconds;
     }
     resume() {
         if (this.intervalSeconds <= 0)

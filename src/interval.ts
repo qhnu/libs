@@ -22,14 +22,13 @@ export class Interval {
     this.resume()
   }
 
+  stop(): void {
+    if (this.setTimeoutId) clearTimeout(this.setTimeoutId)
+  }
+
   seek(seekSeconds: number): void {
     this.stop()
     this.totalSeconds = seekSeconds
-    this.resume()
-  }
-
-  stop(): void {
-    if (this.setTimeoutId) clearTimeout(this.setTimeoutId)
   }
 
   resume(): void {
