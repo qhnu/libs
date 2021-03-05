@@ -7,27 +7,30 @@ export class Interval {
   private totalSeconds = 0
   private setTimeoutId: NodeJS.Timeout | null = null
 
-  start(
+  resetStart(
     callback: (totalSeconds: number) => void,
     intervalSeconds: number,
     endSeconds?: number
   ): void {
-    this.stop()
+    this.pause()
 
     this.callback = callback
     this.intervalSeconds = intervalSeconds
     this.intervalMs = intervalSeconds * 1000
     if (endSeconds) this.endSeconds = endSeconds
 
+    this.totalSeconds = 0
+    this.setTimeoutId = null
+
     this.resume()
   }
 
-  stop(): void {
+  pause(): void {
     if (this.setTimeoutId) clearTimeout(this.setTimeoutId)
   }
 
   seek(seekSeconds: number): void {
-    this.stop()
+    this.pause()
     this.totalSeconds = seekSeconds
   }
 

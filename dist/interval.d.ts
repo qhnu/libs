@@ -5,8 +5,8 @@ export declare class Interval {
     private endSeconds;
     private totalSeconds;
     private setTimeoutId;
-    start(callback: (totalSeconds: number) => void, intervalSeconds: number, endSeconds?: number): void;
-    stop(): void;
+    resetStart(callback: (totalSeconds: number) => void, intervalSeconds: number, endSeconds?: number): void;
+    pause(): void;
     seek(seekSeconds: number): void;
     resume(): void;
 }
