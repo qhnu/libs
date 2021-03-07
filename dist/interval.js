@@ -15,7 +15,7 @@ class Interval {
         this.callback = callback;
         this.intervalSeconds = intervalSeconds;
         this.intervalMs = intervalSeconds * 1000;
-        this.endSeconds = endSeconds ?? 0;
+        this.endSeconds = endSeconds !== null && endSeconds !== void 0 ? endSeconds : 0;
         this.totalSeconds = 0;
         this.setTimeoutId = null;
         this.resume();
