@@ -55,7 +55,7 @@ export const resizeChrome = async () => {
         break
       }
     }
-    appWindow.bounds = { x: 0, y: 0, width: 1750, height: 1200 } // objでのsetが必要
+    appWindow.bounds = { x: 0, y: 0, width: 1705, height: 1200 } // objでのsetが必要
   }, CHROME_PATH)
 }
 
