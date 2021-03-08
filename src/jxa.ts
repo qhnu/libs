@@ -21,6 +21,7 @@ export const showUiElementName = async (
       const app = Application(appPath)
       if (!app.running()) app.launch()
 
+      app.activate()
       const process = Application('System Events').processes[app.name()]
 
       for (const content of process.entireContents()) {
@@ -47,35 +48,23 @@ export const resizeChrome = async () => {
   return await run((CHROME_PATH: string) => {
     const app = Application(CHROME_PATH)
 
-    let window = null
-    for (const i of Array(app.windows.length).keys()) {
-      if (!/^Dev/.test(app.windows[i].name())) {
-        window = app.windows[i]
+    let appWindow = null
+    for (const window of app.windows()) {
+      if (!/^Dev/.test(window.name())) {
+        appWindow = window
         break
       }
     }
-    window.bounds = { x: 0, y: 0, width: 1800, height: 1200 } // objでのsetが必要
-
-    let tab = null
-    for (const i of Array(window.tabs.length).keys()) {
-      if (/^http:\/\/localhost/.test(window.tabs[i].url())) {
-        tab = window.tabs[i]
-        window.activeTabIndex = i + 1 // インデックスは1から始まる
-        break
-      }
-    }
+    appWindow.bounds = { x: 0, y: 0, width: 1800, height: 1200 } // objでのsetが必要
   }, CHROME_PATH)
 }
 
 export const prepareIris = async () => {
   return await run((IRIS_PATH: string) => {
     const app = Application(IRIS_PATH)
-    if (app.running()) {
-      app.quit()
-      delay(1)
-    }
-    app.launch()
+    if (!app.running()) app.launch()
 
+    app.activate()
     const process = Application('System Events').processes[app.name()]
     process.menuBars
       .at(0)
@@ -89,6 +78,9 @@ export const prepareIris = async () => {
 export const startRecord = async () => {
   return await run((IRIS_PATH: string) => {
     const app = Application(IRIS_PATH)
+    if (!app.running()) app.launch()
+
+    app.activate()
     const process = Application('System Events').processes[app.name()]
     process.windows.byName('Settings Window').buttons.byName('Record').click()
   }, IRIS_PATH)
@@ -97,6 +89,8 @@ export const startRecord = async () => {
 export const stopRecord = async () => {
   return await run((IRIS_PATH) => {
     const app = Application(IRIS_PATH)
+
+    app.activate()
     const process = Application('System Events').processes[app.name()]
     process.menuBars
       .at(0)
@@ -127,18 +121,20 @@ export const switchAudioOutput = async (outputName: 'BlackHole' | '内蔵') => {
       const anchor = pane.anchors['output']
       anchor.reveal()
 
+      app.activate()
       const process = Application('System Events').processes[
         'System Preferences'
       ]
 
       const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows
 
-      rows().forEach((row: any) => {
+      for (const row of rows()) {
         const name = row.textFields[0].value()
         if (name.includes(outputName)) {
           row.select()
+          break
         }
-      })
+      }
 
       const selected = rows.where({ selected: true })[0].textFields[0].value()
       console.log(`[Jxa] selected=${selected}`)
