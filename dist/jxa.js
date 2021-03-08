@@ -45,7 +45,7 @@ const resizeChrome = async () => {
                 break;
             }
         }
-        appWindow.bounds = { x: 0, y: 0, width: 1800, height: 1200 };
+        appWindow.bounds = { x: 0, y: 0, width: 1750, height: 1200 };
     }, CHROME_PATH);
 };
 exports.resizeChrome = resizeChrome;
