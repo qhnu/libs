@@ -5,4 +5,5 @@ export declare const prepareIris: () => Promise<unknown>;
 export declare const startRecord: () => Promise<unknown>;
 export declare const stopRecord: () => Promise<unknown>;
 export declare const sleepOs: () => Promise<unknown>;
+export declare const switchAudioOutput: (outputName: 'BlackHole' | '内蔵') => Promise<unknown>;
 //# sourceMappingURL=jxa.d.ts.map

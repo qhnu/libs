@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sleepOs = exports.stopRecord = exports.startRecord = exports.prepareIris = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
+exports.switchAudioOutput = exports.sleepOs = exports.stopRecord = exports.startRecord = exports.prepareIris = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
 const run_1 = require("@jxa/run");
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app';
 const IRIS_PATH = '/Applications/_Video/Iris.app';
@@ -13,38 +13,34 @@ const fetchArgs = async (args) => {
 exports.fetchArgs = fetchArgs;
 const showUiElementName = async (appPath, filters = []) => {
     return await run_1.run((appPath, filters) => {
-        const outputUiPath = (applicationName) => {
-            const process = Application('System Events').processes[applicationName];
-            for (const content of process.entireContents()) {
-                const displayString = Automation.getDisplayString(content);
-                if (filters.length) {
-                    for (const row of displayString.split('\n')) {
-                        const has = filters.some((filter) => row.includes(filter));
-                        if (has)
-                            console.log('menu=', row);
-                    }
-                }
-                else {
-                    console.log('menu=', displayString);
-                }
-            }
-        };
         const app = Application(appPath);
         if (!app.running())
             app.launch();
-        outputUiPath(app.name());
+        const process = Application('System Events').processes[app.name()];
+        for (const content of process.entireContents()) {
+            const displayString = Automation.getDisplayString(content);
+            if (filters.length) {
+                for (const row of displayString.split('\n')) {
+                    const has = filters.some((filter) => row.includes(filter));
+                    if (has)
+                        console.log('menu=', row);
+                }
+            }
+            else {
+                console.log('menu=', displayString);
+            }
+        }
         console.log('name=', app.name());
     }, appPath, filters);
 };
 exports.showUiElementName = showUiElementName;
 const resizeChrome = async () => {
     return await run_1.run((CHROME_PATH) => {
-        const chrome = Application(CHROME_PATH);
-        chrome.activate();
+        const app = Application(CHROME_PATH);
         let window = null;
-        for (const i of Array(chrome.windows.length).keys()) {
-            if (!/^Dev/.test(chrome.windows[i].name())) {
-                window = chrome.windows[i];
+        for (const i of Array(app.windows.length).keys()) {
+            if (!/^Dev/.test(app.windows[i].name())) {
+                window = app.windows[i];
                 break;
             }
         }
@@ -62,15 +58,14 @@ const resizeChrome = async () => {
 exports.resizeChrome = resizeChrome;
 const prepareIris = async () => {
     return await run_1.run((IRIS_PATH) => {
-        const irisApp = Application(IRIS_PATH);
-        if (irisApp.running()) {
-            irisApp.quit();
+        const app = Application(IRIS_PATH);
+        if (app.running()) {
+            app.quit();
             delay(1);
         }
-        irisApp.launch();
-        irisApp.activate();
-        const irisEvents = Application('System Events').processes[irisApp.name()];
-        irisEvents.menuBars
+        app.launch();
+        const process = Application('System Events').processes[app.name()];
+        process.menuBars
             .at(0)
             .menuBarItems.byName('File')
             .menus.byName('File')
@@ -81,33 +76,51 @@ const prepareIris = async () => {
 exports.prepareIris = prepareIris;
 const startRecord = async () => {
     return await run_1.run((IRIS_PATH) => {
-        const irisApp = Application(IRIS_PATH);
-        const irisEvents = Application('System Events').processes[irisApp.name()];
-        irisEvents.windows
-            .byName('Settings Window')
-            .buttons.byName('Record')
-            .click();
+        const app = Application(IRIS_PATH);
+        const process = Application('System Events').processes[app.name()];
+        process.windows.byName('Settings Window').buttons.byName('Record').click();
     }, IRIS_PATH);
 };
 exports.startRecord = startRecord;
 const stopRecord = async () => {
     return await run_1.run((IRIS_PATH) => {
-        const irisApp = Application(IRIS_PATH);
-        const irisEvents = Application('System Events').processes[irisApp.name()];
-        irisEvents.menuBars
+        const app = Application(IRIS_PATH);
+        const process = Application('System Events').processes[app.name()];
+        process.menuBars
             .at(0)
             .menuBarItems.byName('File')
             .menus.byName('File')
             .menuItems.byName('Stop')
             .click();
         delay(1);
-        irisApp.quit();
+        app.quit();
     }, IRIS_PATH);
 };
 exports.stopRecord = stopRecord;
 const sleepOs = async () => {
     return await run_1.run(() => {
-        Application('System Events').sleep();
+        const app = Application('System Preferences');
+        app.sleep();
     });
 };
 exports.sleepOs = sleepOs;
+const switchAudioOutput = async (outputName) => {
+    return await run_1.run((outputName) => {
+        const app = Application('System Preferences');
+        const pane = app.panes['com.apple.preference.sound'];
+        const anchor = pane.anchors['output'];
+        anchor.reveal();
+        const process = Application('System Events').processes['System Preferences'];
+        const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows;
+        rows().forEach((row) => {
+            const name = row.textFields[0].value();
+            if (name.includes(outputName)) {
+                row.select();
+            }
+        });
+        const selected = rows.where({ selected: true })[0].textFields[0].value();
+        console.log(`[Jxa] selected=${selected}`);
+        app.quit();
+    }, [outputName]);
+};
+exports.switchAudioOutput = switchAudioOutput;
