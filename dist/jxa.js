@@ -94,7 +94,7 @@ const stopRecord = async () => {
 exports.stopRecord = stopRecord;
 const sleepOs = async () => {
     return await run_1.run(() => {
-        const app = Application('System Preferences');
+        const app = Application('System Events');
         app.sleep();
     });
 };
