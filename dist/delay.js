@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.waitForRender = exports.waitForFrame = void 0;
+exports.waitForMacroTask = exports.waitForMicroTask = exports.waitForRender = exports.waitForFrame = void 0;
+require('setimmediate');
 const waitForFrame = async () => {
     await new Promise((resolve) => {
         requestAnimationFrame(resolve);
@@ -13,3 +14,5 @@ const waitForRender = async () => {
     });
 };
 exports.waitForRender = waitForRender;
+exports.waitForMicroTask = Promise.resolve();
+exports.waitForMacroTask = new Promise((resolve) => setImmediate(resolve));
