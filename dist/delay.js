@@ -14,5 +14,13 @@ const waitForRender = async () => {
     });
 };
 exports.waitForRender = waitForRender;
-exports.waitForMicroTask = Promise.resolve();
-exports.waitForMacroTask = new Promise((resolve) => setImmediate(resolve));
+const waitForMicroTask = async () => {
+    await new Promise((resolve) => resolve());
+};
+exports.waitForMicroTask = waitForMicroTask;
+const waitForMacroTask = async () => {
+    await new Promise((resolve) => {
+        setImmediate(resolve);
+    });
+};
+exports.waitForMacroTask = waitForMacroTask;

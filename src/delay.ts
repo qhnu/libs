@@ -12,8 +12,12 @@ export const waitForRender = async (): Promise<void> => {
   })
 }
 
-export const waitForMicroTask = Promise.resolve()
+export const waitForMicroTask = async (): Promise<void> => {
+  await new Promise<void>((resolve) => resolve())
+}
 
-export const waitForMacroTask = new Promise<void>((resolve) =>
-  setImmediate(resolve)
-)
+export const waitForMacroTask = async (): Promise<void> => {
+  await new Promise((resolve) => {
+    setImmediate(resolve)
+  })
+}
