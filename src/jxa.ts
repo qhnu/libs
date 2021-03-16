@@ -121,7 +121,6 @@ export const switchBlackHoleOutput = async (useBlackHole: boolean) => {
       const anchor = pane.anchors['output']
       anchor.reveal()
 
-      app.activate()
       const process = Application('System Events').processes[
         'System Preferences'
       ]

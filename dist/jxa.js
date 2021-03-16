@@ -105,7 +105,6 @@ const switchBlackHoleOutput = async (useBlackHole) => {
         const pane = app.panes['com.apple.preference.sound'];
         const anchor = pane.anchors['output'];
         anchor.reveal();
-        app.activate();
         const process = Application('System Events').processes['System Preferences'];
         const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows;
         for (const row of rows()) {
