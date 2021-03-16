@@ -114,7 +114,7 @@ export const sleepOs = async () => {
 
 export const switchBlackHoleOutput = async (useBlackHole: boolean) => {
   return await run(
-    (outputName) => {
+    (useBlackHole) => {
       const app = Application('System Preferences')
 
       const pane = app.panes['com.apple.preference.sound']

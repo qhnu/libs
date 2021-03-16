@@ -100,7 +100,7 @@ const sleepOs = async () => {
 };
 exports.sleepOs = sleepOs;
 const switchBlackHoleOutput = async (useBlackHole) => {
-    return await run_1.run((outputName) => {
+    return await run_1.run((useBlackHole) => {
         const app = Application('System Preferences');
         const pane = app.panes['com.apple.preference.sound'];
         const anchor = pane.anchors['output'];
