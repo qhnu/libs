@@ -112,41 +112,38 @@ export const sleepOs = async () => {
   })
 }
 
-export const switchBlackHoleOutput = async (useBlackHole: 'Y' | 'N') => {
-  return await run(
-    (useBlackHole) => {
-      const app = Application('System Preferences')
+export const switchBlackHoleOutput = async (useBlackHole: boolean) => {
+  return await run((useBlackHole) => {
+    const app = Application('System Preferences')
 
-      const pane = app.panes['com.apple.preference.sound']
-      const anchor = pane.anchors['output']
-      anchor.reveal()
+    const pane = app.panes['com.apple.preference.sound']
+    const anchor = pane.anchors['output']
+    anchor.reveal()
 
-      const process = Application('System Events').processes[
-        'System Preferences'
-      ]
+    const process = Application('System Events').processes['System Preferences']
 
-      const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows
+    const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows
 
-      for (const row of rows()) {
-        const name = row.textFields[0].value() // BlackHole
-        if (useBlackHole === 'Y') {
-          if (name.includes('BlackHole')) {
-            row.select()
-            break
-          }
-        } else {
-          if (!name.includes('BlackHole')) {
-            row.select()
-            break
-          }
+    const TARGET_NAME = 'BlackHole'
+
+    for (const row of rows()) {
+      const name = row.textFields[0].value()
+      if (useBlackHole) {
+        if (name.includes(TARGET_NAME)) {
+          row.select()
+          break
+        }
+      } else {
+        if (!name.includes(TARGET_NAME)) {
+          row.select()
+          break
         }
       }
+    }
 
-      const selected = rows.where({ selected: true })[0].textFields[0].value()
-      console.log(`[Jxa] selected=${selected}`)
+    const selected = rows.where({ selected: true })[0].textFields[0].value()
+    console.log(`[Jxa] selected=${selected}`)
 
-      app.quit()
-    },
-    [useBlackHole]
-  )
+    app.quit()
+  }, useBlackHole)
 }

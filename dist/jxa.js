@@ -107,16 +107,17 @@ const switchBlackHoleOutput = async (useBlackHole) => {
         anchor.reveal();
         const process = Application('System Events').processes['System Preferences'];
         const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows;
+        const TARGET_NAME = 'BlackHole';
         for (const row of rows()) {
             const name = row.textFields[0].value();
-            if (useBlackHole === 'Y') {
-                if (name.includes('BlackHole')) {
+            if (useBlackHole) {
+                if (name.includes(TARGET_NAME)) {
                     row.select();
                     break;
                 }
             }
             else {
-                if (!name.includes('BlackHole')) {
+                if (!name.includes(TARGET_NAME)) {
                     row.select();
                     break;
                 }
@@ -125,6 +126,6 @@ const switchBlackHoleOutput = async (useBlackHole) => {
         const selected = rows.where({ selected: true })[0].textFields[0].value();
         console.log(`[Jxa] selected=${selected}`);
         app.quit();
-    }, [useBlackHole]);
+    }, useBlackHole);
 };
 exports.switchBlackHoleOutput = switchBlackHoleOutput;
