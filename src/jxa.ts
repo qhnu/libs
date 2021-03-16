@@ -129,7 +129,7 @@ export const switchBlackHoleOutput = async (useBlackHole: boolean) => {
 
       for (const row of rows()) {
         const name = row.textFields[0].value() // BlackHole
-        if (useBlackHole) {
+        if (Boolean(useBlackHole)) {
           if (name.includes('BlackHole')) {
             row.select()
             break
