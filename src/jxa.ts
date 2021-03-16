@@ -112,7 +112,7 @@ export const sleepOs = async () => {
   })
 }
 
-export const switchAudioOutput = async (outputName: 'BlackHole' | '内蔵') => {
+export const switchBlackHoleOutput = async (useBlackHole: boolean) => {
   return await run(
     (outputName) => {
       const app = Application('System Preferences')
@@ -129,10 +129,17 @@ export const switchAudioOutput = async (outputName: 'BlackHole' | '内蔵') => {
       const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows
 
       for (const row of rows()) {
-        const name = row.textFields[0].value()
-        if (name.includes(outputName)) {
-          row.select()
-          break
+        const name = row.textFields[0].value() // BlackHole
+        if (useBlackHole) {
+          if (name.includes('BlackHole')) {
+            row.select()
+            break
+          }
+        } else {
+          if (!name.includes('BlackHole')) {
+            row.select()
+            break
+          }
         }
       }
 
@@ -141,6 +148,6 @@ export const switchAudioOutput = async (outputName: 'BlackHole' | '内蔵') => {
 
       app.quit()
     },
-    [outputName]
+    [useBlackHole]
   )
 }

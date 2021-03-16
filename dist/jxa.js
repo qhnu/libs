@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.switchAudioOutput = exports.sleepOs = exports.stopRecord = exports.startRecord = exports.prepareIris = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
+exports.switchBlackHoleOutput = exports.sleepOs = exports.stopRecord = exports.startRecord = exports.prepareIris = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
 const run_1 = require("@jxa/run");
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app';
 const IRIS_PATH = '/Applications/_Video/Iris.app';
@@ -99,7 +99,7 @@ const sleepOs = async () => {
     });
 };
 exports.sleepOs = sleepOs;
-const switchAudioOutput = async (outputName) => {
+const switchBlackHoleOutput = async (useBlackHole) => {
     return await run_1.run((outputName) => {
         const app = Application('System Preferences');
         const pane = app.panes['com.apple.preference.sound'];
@@ -110,14 +110,22 @@ const switchAudioOutput = async (outputName) => {
         const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows;
         for (const row of rows()) {
             const name = row.textFields[0].value();
-            if (name.includes(outputName)) {
-                row.select();
-                break;
+            if (useBlackHole) {
+                if (name.includes('BlackHole')) {
+                    row.select();
+                    break;
+                }
+            }
+            else {
+                if (!name.includes('BlackHole')) {
+                    row.select();
+                    break;
+                }
             }
         }
         const selected = rows.where({ selected: true })[0].textFields[0].value();
         console.log(`[Jxa] selected=${selected}`);
         app.quit();
-    }, [outputName]);
+    }, [useBlackHole]);
 };
-exports.switchAudioOutput = switchAudioOutput;
+exports.switchBlackHoleOutput = switchBlackHoleOutput;
