@@ -109,7 +109,7 @@ const switchBlackHoleOutput = async (useBlackHole) => {
         const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows;
         for (const row of rows()) {
             const name = row.textFields[0].value();
-            if (Boolean(useBlackHole)) {
+            if (useBlackHole === 'Y') {
                 if (name.includes('BlackHole')) {
                     row.select();
                     break;

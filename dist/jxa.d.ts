@@ -5,5 +5,5 @@ export declare const prepareIris: () => Promise<unknown>;
 export declare const startRecord: () => Promise<unknown>;
 export declare const stopRecord: () => Promise<unknown>;
 export declare const sleepOs: () => Promise<unknown>;
-export declare const switchBlackHoleOutput: (useBlackHole: boolean) => Promise<unknown>;
+export declare const switchBlackHoleOutput: (useBlackHole: 'Y' | 'N') => Promise<unknown>;
 //# sourceMappingURL=jxa.d.ts.map

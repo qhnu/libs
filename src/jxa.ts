@@ -112,7 +112,7 @@ export const sleepOs = async () => {
   })
 }
 
-export const switchBlackHoleOutput = async (useBlackHole: boolean) => {
+export const switchBlackHoleOutput = async (useBlackHole: 'Y' | 'N') => {
   return await run(
     (useBlackHole) => {
       const app = Application('System Preferences')
@@ -129,7 +129,7 @@ export const switchBlackHoleOutput = async (useBlackHole: boolean) => {
 
       for (const row of rows()) {
         const name = row.textFields[0].value() // BlackHole
-        if (Boolean(useBlackHole)) {
+        if (useBlackHole === 'Y') {
           if (name.includes('BlackHole')) {
             row.select()
             break
