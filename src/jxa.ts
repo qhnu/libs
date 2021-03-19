@@ -60,30 +60,44 @@ export const resizeChrome = async () => {
 }
 
 export const prepareIris = async () => {
-  return await run((IRIS_PATH: string) => {
-    const app = Application(IRIS_PATH)
-    if (!app.running()) app.launch()
+  return await run(
+    (IRIS_PATH: string, CHROME_PATH: string) => {
+      const app = Application(IRIS_PATH)
+      if (!app.running()) app.launch()
 
-    app.activate()
-    const process = Application('System Events').processes[app.name()]
-    process.menuBars
-      .at(0)
-      .menuBarItems.byName('File')
-      .menus.byName('File')
-      .menuItems.byName('New Recording...')
-      .click()
-  }, IRIS_PATH)
+      app.activate()
+      const process = Application('System Events').processes[app.name()]
+      process.menuBars
+        .at(0)
+        .menuBarItems.byName('File')
+        .menus.byName('File')
+        .menuItems.byName('New Recording...')
+        .click()
+
+      const chrome = Application(CHROME_PATH)
+      chrome.activate()
+    },
+    IRIS_PATH,
+    CHROME_PATH
+  )
 }
 
 export const startRecord = async () => {
-  return await run((IRIS_PATH: string) => {
-    const app = Application(IRIS_PATH)
-    if (!app.running()) app.launch()
+  return await run(
+    (IRIS_PATH: string, CHROME_PATH: string) => {
+      const app = Application(IRIS_PATH)
+      if (!app.running()) app.launch()
 
-    app.activate()
-    const process = Application('System Events').processes[app.name()]
-    process.windows.byName('Settings Window').buttons.byName('Record').click()
-  }, IRIS_PATH)
+      app.activate()
+      const process = Application('System Events').processes[app.name()]
+      process.windows.byName('Settings Window').buttons.byName('Record').click()
+
+      const chrome = Application(CHROME_PATH)
+      chrome.activate()
+    },
+    IRIS_PATH,
+    CHROME_PATH
+  )
 }
 
 export const stopRecord = async () => {

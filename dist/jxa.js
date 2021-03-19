@@ -50,7 +50,7 @@ const resizeChrome = async () => {
 };
 exports.resizeChrome = resizeChrome;
 const prepareIris = async () => {
-    return await run_1.run((IRIS_PATH) => {
+    return await run_1.run((IRIS_PATH, CHROME_PATH) => {
         const app = Application(IRIS_PATH);
         if (!app.running())
             app.launch();
@@ -62,18 +62,22 @@ const prepareIris = async () => {
             .menus.byName('File')
             .menuItems.byName('New Recording...')
             .click();
-    }, IRIS_PATH);
+        const chrome = Application(CHROME_PATH);
+        chrome.activate();
+    }, IRIS_PATH, CHROME_PATH);
 };
 exports.prepareIris = prepareIris;
 const startRecord = async () => {
-    return await run_1.run((IRIS_PATH) => {
+    return await run_1.run((IRIS_PATH, CHROME_PATH) => {
         const app = Application(IRIS_PATH);
         if (!app.running())
             app.launch();
         app.activate();
         const process = Application('System Events').processes[app.name()];
         process.windows.byName('Settings Window').buttons.byName('Record').click();
-    }, IRIS_PATH);
+        const chrome = Application(CHROME_PATH);
+        chrome.activate();
+    }, IRIS_PATH, CHROME_PATH);
 };
 exports.startRecord = startRecord;
 const stopRecord = async () => {
