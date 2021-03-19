@@ -81,7 +81,7 @@ const startRecord = async () => {
 };
 exports.startRecord = startRecord;
 const stopRecord = async () => {
-    return await run_1.run((IRIS_PATH) => {
+    return await run_1.run((IRIS_PATH, CHROME_PATH) => {
         const app = Application(IRIS_PATH);
         app.activate();
         const process = Application('System Events').processes[app.name()];
@@ -91,9 +91,9 @@ const stopRecord = async () => {
             .menus.byName('File')
             .menuItems.byName('Stop')
             .click();
-        delay(1);
-        app.quit();
-    }, IRIS_PATH);
+        const chrome = Application(CHROME_PATH);
+        chrome.activate();
+    }, IRIS_PATH, CHROME_PATH);
 };
 exports.stopRecord = stopRecord;
 const sleepOs = async () => {

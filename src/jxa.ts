@@ -101,22 +101,25 @@ export const startRecord = async () => {
 }
 
 export const stopRecord = async () => {
-  return await run((IRIS_PATH) => {
-    const app = Application(IRIS_PATH)
+  return await run(
+    (IRIS_PATH, CHROME_PATH: string) => {
+      const app = Application(IRIS_PATH)
 
-    app.activate()
-    const process = Application('System Events').processes[app.name()]
-    process.menuBars
-      .at(0)
-      .menuBarItems.byName('File')
-      .menus.byName('File')
-      .menuItems.byName('Stop')
-      .click()
+      app.activate()
+      const process = Application('System Events').processes[app.name()]
+      process.menuBars
+        .at(0)
+        .menuBarItems.byName('File')
+        .menus.byName('File')
+        .menuItems.byName('Stop')
+        .click()
 
-    delay(1)
-
-    app.quit()
-  }, IRIS_PATH)
+      const chrome = Application(CHROME_PATH)
+      chrome.activate()
+    },
+    IRIS_PATH,
+    CHROME_PATH
+  )
 }
 
 export const sleepOs = async () => {
