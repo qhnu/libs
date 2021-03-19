@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useUpdateShallowCompareEffect = exports.useUpdateLayoutEffect = void 0;
+exports.useUpdateDeepCompareEffect = exports.useUpdateLayoutEffect = void 0;
+const fast_deep_equal_1 = __importDefault(require("fast-deep-equal"));
 const react_1 = require("react");
 const react_use_1 = require("react-use");
 const useUpdateLayoutEffect = (effect, deps = []) => {
@@ -14,14 +18,14 @@ const useUpdateLayoutEffect = (effect, deps = []) => {
     }, deps);
 };
 exports.useUpdateLayoutEffect = useUpdateLayoutEffect;
-const useUpdateShallowCompareEffect = (effect, deps = []) => {
+const useUpdateDeepCompareEffect = (effect, deps = []) => {
     const used = react_1.useRef(false);
-    react_use_1.useShallowCompareEffect(() => {
+    react_use_1.useCustomCompareEffect(() => {
         if (!used.current) {
             used.current = true;
             return;
         }
         effect();
-    }, deps);
+    }, deps, (prevDeps, nextDeps) => fast_deep_equal_1.default(prevDeps, nextDeps));
 };
-exports.useUpdateShallowCompareEffect = useUpdateShallowCompareEffect;
+exports.useUpdateDeepCompareEffect = useUpdateDeepCompareEffect;

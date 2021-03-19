@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react';
-import { useShallowCompareEffect } from 'react-use';
+import { useDeepCompareEffect } from 'react-use';
 export declare const useUpdateLayoutEffect: typeof useLayoutEffect;
-export declare const useUpdateShallowCompareEffect: typeof useShallowCompareEffect;
+export declare const useUpdateDeepCompareEffect: typeof useDeepCompareEffect;
 //# sourceMappingURL=hooks.d.ts.map

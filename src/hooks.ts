@@ -1,5 +1,6 @@
+import equal from 'fast-deep-equal'
 import { useRef, useLayoutEffect } from 'react'
-import { useShallowCompareEffect } from 'react-use'
+import { useDeepCompareEffect, useCustomCompareEffect } from 'react-use'
 
 export const useUpdateLayoutEffect: typeof useLayoutEffect = (
   effect,
@@ -16,17 +17,20 @@ export const useUpdateLayoutEffect: typeof useLayoutEffect = (
   }, deps)
 }
 
-export const useUpdateShallowCompareEffect: typeof useShallowCompareEffect = (
+export const useUpdateDeepCompareEffect: typeof useDeepCompareEffect = (
   effect,
   deps = []
 ) => {
   const used = useRef(false)
-  useShallowCompareEffect(() => {
-    if (!used.current) {
-      used.current = true
-      return
-    }
-    effect()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps)
+  useCustomCompareEffect(
+    () => {
+      if (!used.current) {
+        used.current = true
+        return
+      }
+      effect()
+    },
+    deps,
+    (prevDeps, nextDeps) => equal(prevDeps, nextDeps)
+  )
 }
