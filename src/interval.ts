@@ -1,48 +1,42 @@
 export class Interval {
-  private callback: (totalSeconds: number) => void = () => undefined
   private intervalSeconds = 0
   private intervalMs = 0
-  private endSeconds = 0
+
+  private callback: ((totalSeconds: number) => void) | null = null
+  private endSeconds = -1
 
   private totalSeconds = 0
   private setTimeoutId: NodeJS.Timeout | null = null
 
   resetStart(
-    callback: (totalSeconds: number) => void,
     intervalSeconds: number,
-    endSeconds?: number
+    options?: {
+      callback?: (totalSeconds: number) => void
+      endSeconds?: number
+    }
   ): void {
-    this.pause()
+    if (intervalSeconds <= 0) return
 
-    this.callback = callback
     this.intervalSeconds = intervalSeconds
     this.intervalMs = intervalSeconds * 1000
-    this.endSeconds = endSeconds ?? 0
+
+    this.callback = options?.callback ?? null
+    this.endSeconds = options?.endSeconds ?? -1
 
     this.totalSeconds = 0
+    if (this.setTimeoutId) clearTimeout(this.setTimeoutId)
     this.setTimeoutId = null
 
-    this.resume()
+    this.start()
   }
 
-  pause(): void {
-    if (this.setTimeoutId) clearTimeout(this.setTimeoutId)
-  }
-
-  seek(seekSeconds: number): void {
-    this.pause()
-    this.totalSeconds = seekSeconds
-  }
-
-  resume(): void {
-    if (this.intervalSeconds <= 0) return
-
+  private start(): void {
     let prevCallMs = Date.now() - this.intervalMs
 
     const callInterval = () => {
-      this.callback(this.totalSeconds)
+      if (this.callback) this.callback(this.totalSeconds)
 
-      if (this.endSeconds > 0 && this.endSeconds <= this.totalSeconds) {
+      if (this.endSeconds !== -1 && this.endSeconds <= this.totalSeconds) {
         return
       }
 

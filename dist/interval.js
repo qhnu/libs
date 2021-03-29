@@ -3,38 +3,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Interval = void 0;
 class Interval {
     constructor() {
-        this.callback = () => undefined;
         this.intervalSeconds = 0;
         this.intervalMs = 0;
-        this.endSeconds = 0;
+        this.callback = null;
+        this.endSeconds = -1;
         this.totalSeconds = 0;
         this.setTimeoutId = null;
     }
-    resetStart(callback, intervalSeconds, endSeconds) {
-        this.pause();
-        this.callback = callback;
+    resetStart(intervalSeconds, options) {
+        var _a, _b;
+        if (intervalSeconds <= 0)
+            return;
         this.intervalSeconds = intervalSeconds;
         this.intervalMs = intervalSeconds * 1000;
-        this.endSeconds = endSeconds !== null && endSeconds !== void 0 ? endSeconds : 0;
+        this.callback = (_a = options === null || options === void 0 ? void 0 : options.callback) !== null && _a !== void 0 ? _a : null;
+        this.endSeconds = (_b = options === null || options === void 0 ? void 0 : options.endSeconds) !== null && _b !== void 0 ? _b : -1;
         this.totalSeconds = 0;
-        this.setTimeoutId = null;
-        this.resume();
-    }
-    pause() {
         if (this.setTimeoutId)
             clearTimeout(this.setTimeoutId);
+        this.setTimeoutId = null;
+        this.start();
     }
-    seek(seekSeconds) {
-        this.pause();
-        this.totalSeconds = seekSeconds;
-    }
-    resume() {
-        if (this.intervalSeconds <= 0)
-            return;
+    start() {
         let prevCallMs = Date.now() - this.intervalMs;
         const callInterval = () => {
-            this.callback(this.totalSeconds);
-            if (this.endSeconds > 0 && this.endSeconds <= this.totalSeconds) {
+            if (this.callback)
+                this.callback(this.totalSeconds);
+            if (this.endSeconds !== -1 && this.endSeconds <= this.totalSeconds) {
                 return;
             }
             this.totalSeconds += this.intervalSeconds;
