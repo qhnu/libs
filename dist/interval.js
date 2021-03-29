@@ -41,5 +41,8 @@ class Interval {
         };
         callInterval();
     }
+    getTotalSeconds() {
+        return this.totalSeconds;
+    }
 }
 exports.Interval = Interval;

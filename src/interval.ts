@@ -52,4 +52,8 @@ export class Interval {
 
     callInterval()
   }
+
+  getTotalSeconds(): number {
+    return this.totalSeconds
+  }
 }

@@ -10,5 +10,6 @@ export declare class Interval {
         endSeconds?: number;
     }): void;
     private start;
+    getTotalSeconds(): number;
 }
 //# sourceMappingURL=interval.d.ts.map
