@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.switchBlackHoleOutput = exports.sleepOs = exports.stopRecord = exports.startRecord = exports.prepareIris = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
+exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.stopRecord = exports.startRecord = exports.prepareIris = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
 const run_1 = require("@jxa/run");
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app';
 const IRIS_PATH = '/Applications/_Video/Iris.app';
+const Audio_MIDI_PATH = '/System/Applications/Utilities/Audio MIDI Setup.app';
 const fetchArgs = async (args) => {
     return await run_1.run((args) => {
         const payload = args;
@@ -129,7 +130,76 @@ const switchBlackHoleOutput = async (useBlackHole) => {
         }
         const selected = rows.where({ selected: true })[0].textFields[0].value();
         console.log(`[Jxa] selected=${selected}`);
-        app.quit();
     }, useBlackHole);
 };
 exports.switchBlackHoleOutput = switchBlackHoleOutput;
+const setAudioMidi = async () => {
+    return await run_1.run((Audio_MIDI_PATH) => {
+        const app = Application(Audio_MIDI_PATH);
+        if (!app.running())
+            app.launch();
+        app.activate();
+        const process = Application('System Events').processes[app.name()];
+        const menuItem = process.menuBars
+            .at(0)
+            .menuBarItems.byName('ウインドウ')
+            .menus.byName('ウインドウ')
+            .menuItems.at(0);
+        if (menuItem.name() === 'オーディオ装置を表示') {
+            menuItem.click();
+        }
+        const rows = process.windows
+            .byName('オーディオ装置')
+            .splitterGroups.at(0)
+            .scrollAreas.at(0)
+            .outlines.at(0).rows;
+        const radioButtons = process.windows
+            .byName('オーディオ装置')
+            .splitterGroups.at(0)
+            .tabGroups.at(0).radioButtons;
+        const valueIndicator = process.windows
+            .byName('オーディオ装置')
+            .splitterGroups.at(0)
+            .tabGroups.at(0)
+            .scrollAreas.at(0)
+            .outlines.at(0)
+            .rows.at(1)
+            .uiElements.byName('マスター')
+            .sliders.at(0)
+            .valueIndicators.at(0);
+        const popUpButton = process.windows
+            .byName('オーディオ装置')
+            .splitterGroups.at(0)
+            .tabGroups.at(0)
+            .popUpButtons.at(1);
+        const afterPopUpButton = () => {
+            const menuItems = process.windows
+                .byName('オーディオ装置')
+                .splitterGroups.at(0)
+                .tabGroups.at(0)
+                .popUpButtons.at(1)
+                .menus.at(0).menuItems;
+            for (const menuItem of menuItems()) {
+                if (menuItem.name() === '44,100 Hz') {
+                    menuItem.click();
+                    break;
+                }
+            }
+        };
+        for (const row of rows()) {
+            for (const uiElement of row.uiElements()) {
+                if (uiElement.name() === 'USB MICROPHONE') {
+                    row.select();
+                    radioButtons.byName('入力').click();
+                    valueIndicator.value = 1;
+                }
+                if (uiElement.name() === 'BlackHole 2ch') {
+                    row.select();
+                    radioButtons.byName('出力').click();
+                    valueIndicator.value = 1;
+                }
+            }
+        }
+    }, Audio_MIDI_PATH);
+};
+exports.setAudioMidi = setAudioMidi;
