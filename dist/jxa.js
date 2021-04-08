@@ -134,8 +134,8 @@ const switchBlackHoleOutput = async (useBlackHole) => {
     }, useBlackHole);
 };
 exports.switchBlackHoleOutput = switchBlackHoleOutput;
-const setAudioMidi = async () => {
-    return await run_1.run((Audio_MIDI_PATH) => {
+const setAudioMidi = async (output) => {
+    return await run_1.run((Audio_MIDI_PATH, output) => {
         const app = Application(Audio_MIDI_PATH);
         if (!app.running())
             app.launch();
@@ -192,15 +192,15 @@ const setAudioMidi = async () => {
                 if (uiElement.name() === 'USB MICROPHONE') {
                     row.select();
                     radioButtons.byName('入力').click();
-                    valueIndicator.value = 1;
+                    valueIndicator.value = output;
                 }
                 if (uiElement.name() === 'BlackHole 2ch') {
                     row.select();
                     radioButtons.byName('出力').click();
-                    valueIndicator.value = 1;
+                    valueIndicator.value = output;
                 }
             }
         }
-    }, Audio_MIDI_PATH);
+    }, Audio_MIDI_PATH, output);
 };
 exports.setAudioMidi = setAudioMidi;
