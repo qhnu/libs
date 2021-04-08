@@ -60,6 +60,13 @@ export const resizeChrome = async () => {
   }, CHROME_PATH)
 }
 
+export const activateChrome = async () => {
+  return await run((CHROME_PATH: string) => {
+    const app = Application(CHROME_PATH)
+    app.activate()
+  }, CHROME_PATH)
+}
+
 export const prepareIris = async () => {
   return await run(
     (IRIS_PATH: string, CHROME_PATH: string) => {
@@ -74,9 +81,6 @@ export const prepareIris = async () => {
         .menus.byName('File')
         .menuItems.byName('New Recording...')
         .click()
-
-      const chrome = Application(CHROME_PATH)
-      chrome.activate()
     },
     IRIS_PATH,
     CHROME_PATH
@@ -92,9 +96,6 @@ export const startRecord = async () => {
       app.activate()
       const process = Application('System Events').processes[app.name()]
       process.windows.byName('Settings Window').buttons.byName('Record').click()
-
-      const chrome = Application(CHROME_PATH)
-      chrome.activate()
     },
     IRIS_PATH,
     CHROME_PATH
@@ -114,9 +115,6 @@ export const stopRecord = async () => {
         .menus.byName('File')
         .menuItems.byName('Stop')
         .click()
-
-      const chrome = Application(CHROME_PATH)
-      chrome.activate()
     },
     IRIS_PATH,
     CHROME_PATH

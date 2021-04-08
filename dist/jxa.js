@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.stopRecord = exports.startRecord = exports.prepareIris = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
+exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.stopRecord = exports.startRecord = exports.prepareIris = exports.activateChrome = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
 const run_1 = require("@jxa/run");
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app';
 const IRIS_PATH = '/Applications/_Video/Iris.app';
@@ -50,6 +50,13 @@ const resizeChrome = async () => {
     }, CHROME_PATH);
 };
 exports.resizeChrome = resizeChrome;
+const activateChrome = async () => {
+    return await run_1.run((CHROME_PATH) => {
+        const app = Application(CHROME_PATH);
+        app.activate();
+    }, CHROME_PATH);
+};
+exports.activateChrome = activateChrome;
 const prepareIris = async () => {
     return await run_1.run((IRIS_PATH, CHROME_PATH) => {
         const app = Application(IRIS_PATH);
@@ -63,8 +70,6 @@ const prepareIris = async () => {
             .menus.byName('File')
             .menuItems.byName('New Recording...')
             .click();
-        const chrome = Application(CHROME_PATH);
-        chrome.activate();
     }, IRIS_PATH, CHROME_PATH);
 };
 exports.prepareIris = prepareIris;
@@ -76,8 +81,6 @@ const startRecord = async () => {
         app.activate();
         const process = Application('System Events').processes[app.name()];
         process.windows.byName('Settings Window').buttons.byName('Record').click();
-        const chrome = Application(CHROME_PATH);
-        chrome.activate();
     }, IRIS_PATH, CHROME_PATH);
 };
 exports.startRecord = startRecord;
@@ -92,8 +95,6 @@ const stopRecord = async () => {
             .menus.byName('File')
             .menuItems.byName('Stop')
             .click();
-        const chrome = Application(CHROME_PATH);
-        chrome.activate();
     }, IRIS_PATH, CHROME_PATH);
 };
 exports.stopRecord = stopRecord;
