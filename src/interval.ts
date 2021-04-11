@@ -1,29 +1,25 @@
 export class Interval {
-  private intervalSeconds = 0
-  private intervalMs = 0
+  private intervalMs = -1
+  private callback: ((totalMs: number) => void) | null = null
+  private endMs = -1
 
-  private callback: ((totalSeconds: number) => void) | null = null
-  private endSeconds = -1
-
-  private totalSeconds = 0
+  private totalMs = 0
   private setTimeoutId: NodeJS.Timeout | null = null
 
   resetStart(
-    intervalSeconds: number,
+    intervalMs: number,
     options?: {
       callback?: (totalSeconds: number) => void
-      endSeconds?: number
+      endMs?: number
     }
   ): void {
-    if (intervalSeconds <= 0) return
-
-    this.intervalSeconds = intervalSeconds
-    this.intervalMs = intervalSeconds * 1000
+    if (intervalMs <= 0) throw new Error()
+    this.intervalMs = intervalMs
 
     this.callback = options?.callback ?? null
-    this.endSeconds = options?.endSeconds ?? -1
+    this.endMs = options?.endMs ?? -1
 
-    this.totalSeconds = 0
+    this.totalMs = 0
     if (this.setTimeoutId) clearTimeout(this.setTimeoutId)
     this.setTimeoutId = null
 
@@ -34,26 +30,27 @@ export class Interval {
     let prevCallMs = Date.now() - this.intervalMs
 
     const callInterval = () => {
-      if (this.callback) this.callback(this.totalSeconds)
+      if (this.callback) this.callback(this.totalMs)
 
-      if (this.endSeconds !== -1 && this.endSeconds <= this.totalSeconds) {
+      if (this.endMs !== -1 && this.endMs <= this.totalMs) {
         return
       }
 
-      this.totalSeconds += this.intervalSeconds
+      this.totalMs += this.intervalMs
 
       const currMs = Date.now()
       const diffMs = currMs - prevCallMs - this.intervalMs
-      const nextMs = this.intervalMs - diffMs
       prevCallMs = currMs
 
+      const nextMs = this.intervalMs - diffMs
       this.setTimeoutId = setTimeout(() => callInterval(), nextMs)
     }
 
     callInterval()
   }
 
-  getTotalSeconds(): number {
-    return this.totalSeconds
+  revoke(): void {
+    if (this.setTimeoutId) clearTimeout(this.setTimeoutId)
+    this.setTimeoutId = null
   }
 }

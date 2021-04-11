@@ -1,15 +1,14 @@
 export declare class Interval {
-    private intervalSeconds;
     private intervalMs;
     private callback;
-    private endSeconds;
-    private totalSeconds;
+    private endMs;
+    private totalMs;
     private setTimeoutId;
-    resetStart(intervalSeconds: number, options?: {
+    resetStart(intervalMs: number, options?: {
         callback?: (totalSeconds: number) => void;
-        endSeconds?: number;
+        endMs?: number;
     }): void;
     private start;
-    getTotalSeconds(): number;
+    revoke(): void;
 }
 //# sourceMappingURL=interval.d.ts.map

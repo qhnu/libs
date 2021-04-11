@@ -3,22 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Interval = void 0;
 class Interval {
     constructor() {
-        this.intervalSeconds = 0;
-        this.intervalMs = 0;
+        this.intervalMs = -1;
         this.callback = null;
-        this.endSeconds = -1;
-        this.totalSeconds = 0;
+        this.endMs = -1;
+        this.totalMs = 0;
         this.setTimeoutId = null;
     }
-    resetStart(intervalSeconds, options) {
+    resetStart(intervalMs, options) {
         var _a, _b;
-        if (intervalSeconds <= 0)
-            return;
-        this.intervalSeconds = intervalSeconds;
-        this.intervalMs = intervalSeconds * 1000;
+        if (intervalMs <= 0)
+            throw new Error();
+        this.intervalMs = intervalMs;
         this.callback = (_a = options === null || options === void 0 ? void 0 : options.callback) !== null && _a !== void 0 ? _a : null;
-        this.endSeconds = (_b = options === null || options === void 0 ? void 0 : options.endSeconds) !== null && _b !== void 0 ? _b : -1;
-        this.totalSeconds = 0;
+        this.endMs = (_b = options === null || options === void 0 ? void 0 : options.endMs) !== null && _b !== void 0 ? _b : -1;
+        this.totalMs = 0;
         if (this.setTimeoutId)
             clearTimeout(this.setTimeoutId);
         this.setTimeoutId = null;
@@ -28,21 +26,23 @@ class Interval {
         let prevCallMs = Date.now() - this.intervalMs;
         const callInterval = () => {
             if (this.callback)
-                this.callback(this.totalSeconds);
-            if (this.endSeconds !== -1 && this.endSeconds <= this.totalSeconds) {
+                this.callback(this.totalMs);
+            if (this.endMs !== -1 && this.endMs <= this.totalMs) {
                 return;
             }
-            this.totalSeconds += this.intervalSeconds;
+            this.totalMs += this.intervalMs;
             const currMs = Date.now();
             const diffMs = currMs - prevCallMs - this.intervalMs;
-            const nextMs = this.intervalMs - diffMs;
             prevCallMs = currMs;
+            const nextMs = this.intervalMs - diffMs;
             this.setTimeoutId = setTimeout(() => callInterval(), nextMs);
         };
         callInterval();
     }
-    getTotalSeconds() {
-        return this.totalSeconds;
+    revoke() {
+        if (this.setTimeoutId)
+            clearTimeout(this.setTimeoutId);
+        this.setTimeoutId = null;
     }
 }
 exports.Interval = Interval;
