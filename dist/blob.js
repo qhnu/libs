@@ -14,8 +14,8 @@ const cloneBlob = async (blob) => {
     });
 };
 exports.cloneBlob = cloneBlob;
-const base64ToBlob = (base64, mime) => {
-    const binaryString = atob(base64);
+const base64ToBlob = (base64Body, mime) => {
+    const binaryString = atob(base64Body);
     const buffer = Uint8Array.from(binaryString.split(''), (char) => char.charCodeAt(0));
     return new Blob([buffer], { type: mime });
 };

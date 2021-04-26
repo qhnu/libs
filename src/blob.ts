@@ -14,8 +14,8 @@ export const cloneBlob = async (blob: Blob): Promise<Blob> => {
   })
 }
 
-export const base64ToBlob = (base64: string, mime: 'audio/mpeg'): Blob => {
-  const binaryString = atob(base64)
+export const base64ToBlob = (base64Body: string, mime: 'audio/mpeg'): Blob => {
+  const binaryString = atob(base64Body)
   const buffer = Uint8Array.from(binaryString.split(''), (char) =>
     char.charCodeAt(0)
   )

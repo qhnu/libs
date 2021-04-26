@@ -1,5 +1,5 @@
 import equal from 'fast-deep-equal'
-import { useRef, useLayoutEffect } from 'react'
+import { useRef, useLayoutEffect, useState, useCallback } from 'react'
 import { useDeepCompareEffect, useCustomCompareEffect } from 'react-use'
 
 export const useUpdateLayoutEffect: typeof useLayoutEffect = (
@@ -33,4 +33,20 @@ export const useUpdateDeepCompareEffect: typeof useDeepCompareEffect = (
     deps,
     (prevDeps, nextDeps) => equal(prevDeps, nextDeps)
   )
+}
+
+export const useObjState = <T>(init: T): [T, (newObj: T) => void] => {
+  const [obj, setObjState] = useState(init)
+
+  const setObj = useCallback((newObj: T) => {
+    setObjState((currValue) => {
+      if (equal(currValue, newObj)) {
+        return currValue
+      } else {
+        return newObj
+      }
+    })
+  }, [])
+
+  return [obj, setObj]
 }
