@@ -58,7 +58,7 @@ const activateChrome = async () => {
 };
 exports.activateChrome = activateChrome;
 const prepareIris = async () => {
-    return await run_1.run((IRIS_PATH, CHROME_PATH) => {
+    return await run_1.run((IRIS_PATH) => {
         const app = Application(IRIS_PATH);
         if (!app.running())
             app.launch();
@@ -70,22 +70,22 @@ const prepareIris = async () => {
             .menus.byName('File')
             .menuItems.byName('New Recording...')
             .click();
-    }, IRIS_PATH, CHROME_PATH);
+    }, IRIS_PATH);
 };
 exports.prepareIris = prepareIris;
 const startRecord = async () => {
-    return await run_1.run((IRIS_PATH, CHROME_PATH) => {
+    return await run_1.run((IRIS_PATH) => {
         const app = Application(IRIS_PATH);
         if (!app.running())
             app.launch();
         app.activate();
         const process = Application('System Events').processes[app.name()];
         process.windows.byName('Settings Window').buttons.byName('Record').click();
-    }, IRIS_PATH, CHROME_PATH);
+    }, IRIS_PATH);
 };
 exports.startRecord = startRecord;
 const stopRecord = async () => {
-    return await run_1.run((IRIS_PATH, CHROME_PATH) => {
+    return await run_1.run((IRIS_PATH) => {
         const app = Application(IRIS_PATH);
         app.activate();
         const process = Application('System Events').processes[app.name()];
@@ -95,7 +95,7 @@ const stopRecord = async () => {
             .menus.byName('File')
             .menuItems.byName('Stop')
             .click();
-    }, IRIS_PATH, CHROME_PATH);
+    }, IRIS_PATH);
 };
 exports.stopRecord = stopRecord;
 const sleepOs = async () => {
@@ -111,7 +111,7 @@ const switchBlackHoleOutput = async (useBlackHole) => {
         const pane = app.panes['com.apple.preference.sound'];
         const anchor = pane.anchors['output'];
         anchor.reveal();
-        const process = Application('System Events').processes['System Preferences'];
+        const process = Application('System Events').processes[app.name()];
         const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows;
         const TARGET_NAME = 'BlackHole';
         for (const row of rows()) {

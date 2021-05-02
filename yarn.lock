@@ -2406,11 +2406,6 @@ dayjs@^1.10.4:
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.4.tgz#8e544a9b8683f61783f570980a8a80eaf54ab1e2"
   integrity sha512-RI/Hh4kqRc1UKLOAf/T5zdMMX5DQIlDxwUe3wSyMMnEbGunnpENCdbUgM+dW7kXidZqCttBrmw7BhN4TMddkCw==
 
-debounce@^1.2.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
-  integrity sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
-
 debug@2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
@@ -3147,6 +3142,11 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
+
+fast-average-color@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/fast-average-color/-/fast-average-color-6.4.0.tgz#c8063e734bc1d98ca66af77765ce669b0cea2417"
+  integrity sha512-K02qOR6MSJIGrGm3p/yPvUnxztL2wDhBHy1wz0ad9X00YQJNPC3jh9ntuj5FnekuYDr8yTjl2CsAiALwZ1QA/w==
 
 fast-copy@^2.1.1:
   version "2.1.1"
@@ -6334,26 +6334,10 @@ react-refresh@0.8.3:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
-react-superellipse@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/react-superellipse/-/react-superellipse-0.0.6.tgz#2d79df0fc435ab06825d8c5ec05244288eae48c8"
-  integrity sha512-2SXAfbDY4EHor1vD2/D0Eg/38UKg+FcbontVOdxx0dztR4MIWXOXaobV7npj0JPuMv912QfUN0xe6mYEL//FPA==
-  dependencies:
-    react-use-measure "^2.0.0"
-    resize-observer-polyfill "^1.5.1"
-    superellipsejs "^0.0.6"
-
 react-universal-interface@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/react-universal-interface/-/react-universal-interface-0.6.2.tgz#5e8d438a01729a4dbbcbeeceb0b86be146fe2b3b"
   integrity sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==
-
-react-use-measure@^2.0.0:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/react-use-measure/-/react-use-measure-2.0.3.tgz#7b56ae3ca19ccf62326933678625a8ff6b3f90a3"
-  integrity sha512-57O8Os9MbgFEHuOHOXNdPmBHhXjCBIwtB3YxyrM/MgaX44a1o97Mu9YqiOA6cAF8kXIw4fO3XK0r2Taa4SqaqQ==
-  dependencies:
-    debounce "^1.2.0"
 
 react-use@^17.2.1:
   version "17.2.1"

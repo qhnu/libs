@@ -1,3 +1,9 @@
-export declare const modifyHslUseLch: (cssHsl: string, modH: number, modS: number, modL: number) => string;
-export declare const generateFontColor: (cssHsl: string) => string;
+interface Location {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+}
+export declare const getFontColor: (imgEl: HTMLImageElement, location: Location, threshold?: number) => string;
+export {};
 //# sourceMappingURL=color.d.ts.map

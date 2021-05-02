@@ -1,5 +1,5 @@
-/* eslint-disable */
-import * as Empty from '@jxa/global-type'
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import _ from '@jxa/global-type'
 import { run } from '@jxa/run'
 
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app'
@@ -69,7 +69,7 @@ export const activateChrome = async () => {
 
 export const prepareIris = async () => {
   return await run(
-    (IRIS_PATH: string, CHROME_PATH: string) => {
+    (IRIS_PATH: string) => {
       const app = Application(IRIS_PATH)
       if (!app.running()) app.launch()
 
@@ -82,14 +82,13 @@ export const prepareIris = async () => {
         .menuItems.byName('New Recording...')
         .click()
     },
-    IRIS_PATH,
-    CHROME_PATH
+    IRIS_PATH
   )
 }
 
 export const startRecord = async () => {
   return await run(
-    (IRIS_PATH: string, CHROME_PATH: string) => {
+    (IRIS_PATH: string) => {
       const app = Application(IRIS_PATH)
       if (!app.running()) app.launch()
 
@@ -97,14 +96,13 @@ export const startRecord = async () => {
       const process = Application('System Events').processes[app.name()]
       process.windows.byName('Settings Window').buttons.byName('Record').click()
     },
-    IRIS_PATH,
-    CHROME_PATH
+    IRIS_PATH
   )
 }
 
 export const stopRecord = async () => {
   return await run(
-    (IRIS_PATH, CHROME_PATH: string) => {
+    (IRIS_PATH) => {
       const app = Application(IRIS_PATH)
 
       app.activate()
@@ -116,8 +114,7 @@ export const stopRecord = async () => {
         .menuItems.byName('Stop')
         .click()
     },
-    IRIS_PATH,
-    CHROME_PATH
+    IRIS_PATH
   )
 }
 
@@ -136,7 +133,7 @@ export const switchBlackHoleOutput = async (useBlackHole: boolean) => {
     const anchor = pane.anchors['output']
     anchor.reveal()
 
-    const process = Application('System Events').processes['System Preferences']
+    const process = Application('System Events').processes[app.name()]
 
     const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows
 
@@ -159,8 +156,6 @@ export const switchBlackHoleOutput = async (useBlackHole: boolean) => {
 
     const selected = rows.where({ selected: true })[0].textFields[0].value()
     console.log(`[Jxa] selected=${selected}`)
-
-    // app.quit()
   }, useBlackHole)
 }
 
