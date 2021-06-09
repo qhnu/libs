@@ -17,7 +17,10 @@ export const showUiElementName = async (appPath: string, filters: string[] = [])
   return await run(
     (appPath: string, filters: string[]) => {
       const app = Application(appPath)
-      if (!app.running()) app.launch()
+      if (!app.running()) {
+        app.launch()
+        delay(0.5)
+      }
       app.activate()
 
       const process = Application('System Events').processes[app.name()]
@@ -109,7 +112,10 @@ export const setAudioMidi = async (output: number) => {
   return await run(
     (Audio_MIDI_PATH: string, output: number) => {
       const app = Application(Audio_MIDI_PATH)
-      if (!app.running()) app.launch()
+      if (!app.running()) {
+        app.launch()
+        delay(0.5)
+      }
       app.activate()
 
       const process = Application('System Events').processes[app.name()]
@@ -200,7 +206,10 @@ export const setAudioMidi = async (output: number) => {
 export const saveVoice = async () => {
   return await run((VOICE_PATH: string) => {
     const app = Application(VOICE_PATH)
-    if (!app.running()) app.launch()
+    if (!app.running()) {
+      app.launch()
+      delay(0.5)
+    }
     app.activate()
 
     const process = Application('System Events').processes[app.name()]
@@ -235,6 +244,8 @@ export const saveVoice = async () => {
       .menus.byName('音声')
       .menuItems.byName('音声の保存 (⌘S)')
       .click()
+
+    delay(0.5)
 
     const systemEvents = Application('System Events')
     const fileName = Date.now()

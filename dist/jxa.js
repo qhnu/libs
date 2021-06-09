@@ -15,8 +15,10 @@ exports.fetchArgs = fetchArgs;
 const showUiElementName = async (appPath, filters = []) => {
     return await run_1.run((appPath, filters) => {
         const app = Application(appPath);
-        if (!app.running())
+        if (!app.running()) {
             app.launch();
+            delay(0.5);
+        }
         app.activate();
         const process = Application('System Events').processes[app.name()];
         for (const content of process.entireContents()) {
@@ -96,8 +98,10 @@ exports.switchBlackHoleOutput = switchBlackHoleOutput;
 const setAudioMidi = async (output) => {
     return await run_1.run((Audio_MIDI_PATH, output) => {
         const app = Application(Audio_MIDI_PATH);
-        if (!app.running())
+        if (!app.running()) {
             app.launch();
+            delay(0.5);
+        }
         app.activate();
         const process = Application('System Events').processes[app.name()];
         const menuItem = process.menuBars
@@ -166,8 +170,10 @@ exports.setAudioMidi = setAudioMidi;
 const saveVoice = async () => {
     return await run_1.run((VOICE_PATH) => {
         const app = Application(VOICE_PATH);
-        if (!app.running())
+        if (!app.running()) {
             app.launch();
+            delay(0.5);
+        }
         app.activate();
         const process = Application('System Events').processes[app.name()];
         const window = process.windows[0];
@@ -197,6 +203,7 @@ const saveVoice = async () => {
             .menus.byName('音声')
             .menuItems.byName('音声の保存 (⌘S)')
             .click();
+        delay(0.5);
         const systemEvents = Application('System Events');
         const fileName = Date.now();
         systemEvents.keystroke(String(fileName));
