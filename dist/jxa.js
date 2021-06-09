@@ -170,7 +170,9 @@ const saveVoice = async () => {
             app.launch();
         app.activate();
         const process = Application('System Events').processes[app.name()];
-        process.windows[0].bounds = { x: 1700, y: 0, width: 750, height: 600 };
+        const window = process.windows[0];
+        window.position = [1700, 0];
+        window.size = [750, 600];
         process.menuBars
             .at(0)
             .menuBarItems.byName('音声')
@@ -195,9 +197,10 @@ const saveVoice = async () => {
             .menus.byName('音声')
             .menuItems.byName('音声の保存 (⌘S)')
             .click();
-        const se = Application('System Events');
-        se.keystroke(`voice-${Date.now()}`);
-        se.keystroke('enter');
+        const systemEvents = Application('System Events');
+        const fileName = Date.now();
+        systemEvents.keystroke(String(fileName));
+        systemEvents.keyCode(52);
     }, VOICE_PATH);
 };
 exports.saveVoice = saveVoice;
