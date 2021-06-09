@@ -17,7 +17,7 @@ const showUiElementName = async (appPath, filters = []) => {
         const app = Application(appPath);
         if (!app.running()) {
             app.launch();
-            delay(0.5);
+            delay(1);
         }
         app.activate();
         const process = Application('System Events').processes[app.name()];
@@ -100,7 +100,7 @@ const setAudioMidi = async (output) => {
         const app = Application(Audio_MIDI_PATH);
         if (!app.running()) {
             app.launch();
-            delay(0.5);
+            delay(1);
         }
         app.activate();
         const process = Application('System Events').processes[app.name()];
@@ -172,7 +172,7 @@ const saveVoice = async () => {
         const app = Application(VOICE_PATH);
         if (!app.running()) {
             app.launch();
-            delay(0.5);
+            delay(1);
         }
         app.activate();
         const process = Application('System Events').processes[app.name()];
@@ -203,7 +203,7 @@ const saveVoice = async () => {
             .menus.byName('音声')
             .menuItems.byName('音声の保存 (⌘S)')
             .click();
-        delay(0.5);
+        delay(1);
         const systemEvents = Application('System Events');
         const fileName = Date.now();
         systemEvents.keystroke(String(fileName));

@@ -19,7 +19,7 @@ export const showUiElementName = async (appPath: string, filters: string[] = [])
       const app = Application(appPath)
       if (!app.running()) {
         app.launch()
-        delay(0.5)
+        delay(1)
       }
       app.activate()
 
@@ -114,7 +114,7 @@ export const setAudioMidi = async (output: number) => {
       const app = Application(Audio_MIDI_PATH)
       if (!app.running()) {
         app.launch()
-        delay(0.5)
+        delay(1)
       }
       app.activate()
 
@@ -208,7 +208,7 @@ export const saveVoice = async () => {
     const app = Application(VOICE_PATH)
     if (!app.running()) {
       app.launch()
-      delay(0.5)
+      delay(1)
     }
     app.activate()
 
@@ -245,7 +245,7 @@ export const saveVoice = async () => {
       .menuItems.byName('音声の保存 (⌘S)')
       .click()
 
-    delay(0.5)
+    delay(1)
 
     const systemEvents = Application('System Events')
     const fileName = Date.now()
