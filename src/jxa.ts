@@ -3,8 +3,8 @@ import _ from '@jxa/global-type'
 import { run } from '@jxa/run'
 
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app'
-const IRIS_PATH = '/Applications/_Video/Iris.app'
 const Audio_MIDI_PATH = '/System/Applications/Utilities/Audio MIDI Setup.app'
+const VOICE_PATH = '/Applications/_Video/MYukkuriVoice-darwin-x64/MYukkuriVoice.app'
 
 export const fetchArgs = async (args: any) => {
   return await run((args: any) => {
@@ -13,16 +13,13 @@ export const fetchArgs = async (args: any) => {
   }, args)
 }
 
-export const showUiElementName = async (
-  appPath: string,
-  filters: string[] = []
-) => {
+export const showUiElementName = async (appPath: string, filters: string[] = []) => {
   return await run(
     (appPath: string, filters: string[]) => {
       const app = Application(appPath)
       if (!app.running()) app.launch()
-
       app.activate()
+
       const process = Application('System Events').processes[app.name()]
 
       for (const content of process.entireContents()) {
@@ -65,57 +62,6 @@ export const activateChrome = async () => {
     const app = Application(CHROME_PATH)
     app.activate()
   }, CHROME_PATH)
-}
-
-export const prepareIris = async () => {
-  return await run(
-    (IRIS_PATH: string) => {
-      const app = Application(IRIS_PATH)
-      if (!app.running()) app.launch()
-
-      app.activate()
-      const process = Application('System Events').processes[app.name()]
-      process.menuBars
-        .at(0)
-        .menuBarItems.byName('File')
-        .menus.byName('File')
-        .menuItems.byName('New Recording...')
-        .click()
-    },
-    IRIS_PATH
-  )
-}
-
-export const startRecord = async () => {
-  return await run(
-    (IRIS_PATH: string) => {
-      const app = Application(IRIS_PATH)
-      if (!app.running()) app.launch()
-
-      app.activate()
-      const process = Application('System Events').processes[app.name()]
-      process.windows.byName('Settings Window').buttons.byName('Record').click()
-    },
-    IRIS_PATH
-  )
-}
-
-export const stopRecord = async () => {
-  return await run(
-    (IRIS_PATH) => {
-      const app = Application(IRIS_PATH)
-
-      app.activate()
-      const process = Application('System Events').processes[app.name()]
-      process.menuBars
-        .at(0)
-        .menuBarItems.byName('File')
-        .menus.byName('File')
-        .menuItems.byName('Stop')
-        .click()
-    },
-    IRIS_PATH
-  )
 }
 
 export const sleepOs = async () => {
@@ -164,8 +110,8 @@ export const setAudioMidi = async (output: number) => {
     (Audio_MIDI_PATH: string, output: number) => {
       const app = Application(Audio_MIDI_PATH)
       if (!app.running()) app.launch()
-
       app.activate()
+
       const process = Application('System Events').processes[app.name()]
 
       const menuItem = process.menuBars
@@ -249,4 +195,46 @@ export const setAudioMidi = async (output: number) => {
     Audio_MIDI_PATH,
     output
   )
+}
+
+export const saveVoice = async () => {
+  return await run((VOICE_PATH: string) => {
+    const app = Application(VOICE_PATH)
+    if (!app.running()) app.launch()
+    app.activate()
+
+    const process = Application('System Events').processes[app.name()]
+
+    process.windows[0].bounds = { x: 1700, y: 0, width: 750, height: 600 }
+
+    process.menuBars
+      .at(0)
+      .menuBarItems.byName('音声')
+      .menus.byName('音声')
+      .menuItems.byName('入力をクリア')
+      .click()
+    process.menuBars
+      .at(0)
+      .menuBarItems.byName('音声')
+      .menus.byName('音声')
+      .menuItems.byName('クリップボードからコピー (⌘D)')
+      .click()
+
+    process.menuBars
+      .at(0)
+      .menuBarItems.byName('音声')
+      .menus.byName('音声')
+      .menuItems.byName('音記号列に変換 (⌘→)')
+      .click()
+    process.menuBars
+      .at(0)
+      .menuBarItems.byName('音声')
+      .menus.byName('音声')
+      .menuItems.byName('音声の保存 (⌘S)')
+      .click()
+
+    const se = Application('System Events')
+    se.keystroke(`voice-${Date.now()}`)
+    se.keystroke('enter')
+  }, VOICE_PATH)
 }

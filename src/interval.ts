@@ -9,7 +9,7 @@ export class Interval {
   resetStart(
     intervalMs: number,
     options?: {
-      callback?: (totalSeconds: number) => void
+      callback?: (totalMs: number) => void
       endMs?: number
     }
   ): void {

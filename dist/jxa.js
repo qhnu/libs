@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.stopRecord = exports.startRecord = exports.prepareIris = exports.activateChrome = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
+exports.saveVoice = exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.activateChrome = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
 const run_1 = require("@jxa/run");
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app';
-const IRIS_PATH = '/Applications/_Video/Iris.app';
 const Audio_MIDI_PATH = '/System/Applications/Utilities/Audio MIDI Setup.app';
+const VOICE_PATH = '/Applications/_Video/MYukkuriVoice-darwin-x64/MYukkuriVoice.app';
 const fetchArgs = async (args) => {
     return await run_1.run((args) => {
         const payload = args;
@@ -57,47 +57,6 @@ const activateChrome = async () => {
     }, CHROME_PATH);
 };
 exports.activateChrome = activateChrome;
-const prepareIris = async () => {
-    return await run_1.run((IRIS_PATH) => {
-        const app = Application(IRIS_PATH);
-        if (!app.running())
-            app.launch();
-        app.activate();
-        const process = Application('System Events').processes[app.name()];
-        process.menuBars
-            .at(0)
-            .menuBarItems.byName('File')
-            .menus.byName('File')
-            .menuItems.byName('New Recording...')
-            .click();
-    }, IRIS_PATH);
-};
-exports.prepareIris = prepareIris;
-const startRecord = async () => {
-    return await run_1.run((IRIS_PATH) => {
-        const app = Application(IRIS_PATH);
-        if (!app.running())
-            app.launch();
-        app.activate();
-        const process = Application('System Events').processes[app.name()];
-        process.windows.byName('Settings Window').buttons.byName('Record').click();
-    }, IRIS_PATH);
-};
-exports.startRecord = startRecord;
-const stopRecord = async () => {
-    return await run_1.run((IRIS_PATH) => {
-        const app = Application(IRIS_PATH);
-        app.activate();
-        const process = Application('System Events').processes[app.name()];
-        process.menuBars
-            .at(0)
-            .menuBarItems.byName('File')
-            .menus.byName('File')
-            .menuItems.byName('Stop')
-            .click();
-    }, IRIS_PATH);
-};
-exports.stopRecord = stopRecord;
 const sleepOs = async () => {
     return await run_1.run(() => {
         const app = Application('System Events');
@@ -204,3 +163,41 @@ const setAudioMidi = async (output) => {
     }, Audio_MIDI_PATH, output);
 };
 exports.setAudioMidi = setAudioMidi;
+const saveVoice = async () => {
+    return await run_1.run((VOICE_PATH) => {
+        const app = Application(VOICE_PATH);
+        if (!app.running())
+            app.launch();
+        app.activate();
+        const process = Application('System Events').processes[app.name()];
+        process.windows[0].bounds = { x: 1700, y: 0, width: 750, height: 600 };
+        process.menuBars
+            .at(0)
+            .menuBarItems.byName('音声')
+            .menus.byName('音声')
+            .menuItems.byName('入力をクリア')
+            .click();
+        process.menuBars
+            .at(0)
+            .menuBarItems.byName('音声')
+            .menus.byName('音声')
+            .menuItems.byName('クリップボードからコピー (⌘D)')
+            .click();
+        process.menuBars
+            .at(0)
+            .menuBarItems.byName('音声')
+            .menus.byName('音声')
+            .menuItems.byName('音記号列に変換 (⌘→)')
+            .click();
+        process.menuBars
+            .at(0)
+            .menuBarItems.byName('音声')
+            .menus.byName('音声')
+            .menuItems.byName('音声の保存 (⌘S)')
+            .click();
+        const se = Application('System Events');
+        se.keystroke(`voice-${Date.now()}`);
+        se.keystroke('enter');
+    }, VOICE_PATH);
+};
+exports.saveVoice = saveVoice;

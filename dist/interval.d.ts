@@ -5,7 +5,7 @@ export declare class Interval {
     private totalMs;
     private setTimeoutId;
     resetStart(intervalMs: number, options?: {
-        callback?: (totalSeconds: number) => void;
+        callback?: (totalMs: number) => void;
         endMs?: number;
     }): void;
     private start;
