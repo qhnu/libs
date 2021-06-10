@@ -215,7 +215,7 @@ export const saveVoice = async () => {
     const process = Application('System Events').processes[app.name()]
 
     const window = process.windows[0]
-    window.position = [1700, 0]
+    window.position = [1800, 0]
     window.size = [750, 600]
     // console.log('show properties', JSON.stringify(window.properties()))
 
@@ -250,6 +250,9 @@ export const saveVoice = async () => {
     const systemEvents = Application('System Events')
     const fileName = Date.now()
     systemEvents.keystroke(String(fileName))
+
+    delay(1)
+
     systemEvents.keyCode(52)
   }, VOICE_PATH)
 }
