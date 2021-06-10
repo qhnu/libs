@@ -177,7 +177,7 @@ const saveVoice = async () => {
         app.activate();
         const process = Application('System Events').processes[app.name()];
         const window = process.windows[0];
-        window.position = [1800, 0];
+        window.position = [1750, 0];
         window.size = [750, 600];
         process.menuBars
             .at(0)
@@ -203,11 +203,11 @@ const saveVoice = async () => {
             .menus.byName('音声')
             .menuItems.byName('音声の保存 (⌘S)')
             .click();
-        delay(1);
+        delay(0.5);
         const systemEvents = Application('System Events');
         const fileName = Date.now();
         systemEvents.keystroke(String(fileName));
-        delay(1);
+        delay(0.5);
         systemEvents.keyCode(52);
     }, VOICE_PATH);
 };
