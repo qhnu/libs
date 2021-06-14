@@ -205,9 +205,9 @@ const saveVoice = async () => {
             .click();
         delay(0.5);
         const systemEvents = Application('System Events');
-        const fileName = Date.now();
-        systemEvents.keystroke(String(fileName));
-        delay(0.5);
+        systemEvents.keyCode(102);
+        const fileName = String(Date.now());
+        systemEvents.keystroke(fileName);
         systemEvents.keyCode(52);
     }, VOICE_PATH);
 };

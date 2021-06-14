@@ -247,12 +247,13 @@ export const saveVoice = async () => {
 
     delay(0.5)
 
+    // https://qiita.com/zakuroishikuro/items/afab0e33ad2030ba2f92#keycode
     const systemEvents = Application('System Events')
-    const fileName = Date.now()
-    systemEvents.keystroke(String(fileName))
+    systemEvents.keyCode(102) // 「英数」キー
 
-    delay(0.5)
+    const fileName = String(Date.now())
+    systemEvents.keystroke(fileName) // 名称未設定.wavのの「名称未設定」が選択済みの状態で名称変更
 
-    systemEvents.keyCode(52)
+    systemEvents.keyCode(52) // 「return」キー
   }, VOICE_PATH)
 }
