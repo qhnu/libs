@@ -74,17 +74,20 @@ const switchBlackHoleOutput = async (useBlackHole) => {
         anchor.reveal();
         const process = Application('System Events').processes[app.name()];
         const rows = process.windows[0].tabGroups[0].scrollAreas[0].tables[0].rows;
-        const TARGET_NAME = 'BlackHole';
         for (const row of rows()) {
             const name = row.textFields[0].value();
             if (useBlackHole) {
-                if (name.includes(TARGET_NAME)) {
+                if (name.includes('BlackHole')) {
                     row.select();
                     break;
                 }
             }
             else {
-                if (!name.includes(TARGET_NAME)) {
+                if (name.includes('内蔵スピーカー')) {
+                    row.select();
+                    break;
+                }
+                if (name.includes('ヘッドフォン')) {
                     row.select();
                     break;
                 }
@@ -152,7 +155,7 @@ const setAudioMidi = async (output) => {
         };
         for (const row of rows()) {
             for (const uiElement of row.uiElements()) {
-                if (uiElement.name() === 'USB MICROPHONE') {
+                if (uiElement.name() === 'USB audio CODEC 2') {
                     row.select();
                     radioButtons.byName('入力').click();
                     valueIndicator.value = output;
