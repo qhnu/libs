@@ -54,22 +54,12 @@ export const activateApp = async (appPath: string) => {
 export const resizeApp = async (appPath: string) => {
   return await run((appPath: string) => {
     const app = Application(appPath)
+    const process = Application('System Events').processes[app.name()]
 
-    let appWindow = null
-
-    for (const window of app.windows()) {
-      if (!/^Dev/.test(window.name())) {
-        appWindow = window
-        break
-      }
-    }
-
-    if (appWindow.bounds) {
-      appWindow.bounds = { x: 0, y: 0, width: 1700, height: 1200 } // objでのsetが必要
-    } else {
-      appWindow.position = [0, 0]
-      appWindow.size = [1700, 1200]
-    }
+    const window = process.windows[0]
+    window.position = [0, 0]
+    window.size = [1700, 1200]
+    // console.log('show properties', JSON.stringify(window.properties()))
   }, appPath)
 }
 

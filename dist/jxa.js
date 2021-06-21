@@ -47,20 +47,10 @@ exports.activateApp = activateApp;
 const resizeApp = async (appPath) => {
     return await run_1.run((appPath) => {
         const app = Application(appPath);
-        let appWindow = null;
-        for (const window of app.windows()) {
-            if (!/^Dev/.test(window.name())) {
-                appWindow = window;
-                break;
-            }
-        }
-        if (appWindow.bounds) {
-            appWindow.bounds = { x: 0, y: 0, width: 1700, height: 1200 };
-        }
-        else {
-            appWindow.position = [0, 0];
-            appWindow.size = [1700, 1200];
-        }
+        const process = Application('System Events').processes[app.name()];
+        const window = process.windows[0];
+        window.position = [0, 0];
+        window.size = [1700, 1200];
     }, appPath);
 };
 exports.resizeApp = resizeApp;
