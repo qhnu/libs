@@ -2,7 +2,6 @@
 import _ from '@jxa/global-type'
 import { run } from '@jxa/run'
 
-const CHROME_PATH = '/Applications/_Web/Google Chrome.app'
 const Audio_MIDI_PATH = '/System/Applications/Utilities/Audio MIDI Setup.app'
 const VOICE_PATH = '/Applications/_Video/MYukkuriVoice-darwin-x64/MYukkuriVoice.app'
 
