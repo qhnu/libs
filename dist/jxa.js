@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveVoice = exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.activateChrome = exports.resizeChrome = exports.activateApp = exports.showUiElementName = exports.fetchArgs = void 0;
+exports.saveVoice = exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.resizeApp = exports.activateApp = exports.showUiElementName = exports.fetchArgs = void 0;
 const run_1 = require("@jxa/run");
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app';
 const Audio_MIDI_PATH = '/System/Applications/Utilities/Audio MIDI Setup.app';
@@ -45,9 +45,9 @@ const activateApp = async (appPath) => {
     }, appPath);
 };
 exports.activateApp = activateApp;
-const resizeChrome = async () => {
-    return await run_1.run((CHROME_PATH) => {
-        const app = Application(CHROME_PATH);
+const resizeApp = async (appPath) => {
+    return await run_1.run((appPath) => {
+        const app = Application(appPath);
         let appWindow = null;
         for (const window of app.windows()) {
             if (!/^Dev/.test(window.name())) {
@@ -55,17 +55,16 @@ const resizeChrome = async () => {
                 break;
             }
         }
-        appWindow.bounds = { x: 0, y: 0, width: 1700, height: 1200 };
-    }, CHROME_PATH);
+        if (appWindow.bounds) {
+            appWindow.bounds = { x: 0, y: 0, width: 1700, height: 1200 };
+        }
+        else {
+            appWindow.position = [0, 0];
+            appWindow.size = [1700, 1200];
+        }
+    }, appPath);
 };
-exports.resizeChrome = resizeChrome;
-const activateChrome = async () => {
-    return await run_1.run((CHROME_PATH) => {
-        const app = Application(CHROME_PATH);
-        app.activate();
-    }, CHROME_PATH);
-};
-exports.activateChrome = activateChrome;
+exports.resizeApp = resizeApp;
 const sleepOs = async () => {
     return await run_1.run(() => {
         const app = Application('System Events');

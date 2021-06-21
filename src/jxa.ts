@@ -52,26 +52,26 @@ export const activateApp = async (appPath: string) => {
   }, appPath)
 }
 
-export const resizeChrome = async () => {
-  return await run((CHROME_PATH: string) => {
-    const app = Application(CHROME_PATH)
+export const resizeApp = async (appPath: string) => {
+  return await run((appPath: string) => {
+    const app = Application(appPath)
 
     let appWindow = null
+
     for (const window of app.windows()) {
       if (!/^Dev/.test(window.name())) {
         appWindow = window
         break
       }
     }
-    appWindow.bounds = { x: 0, y: 0, width: 1700, height: 1200 } // objでのsetが必要
-  }, CHROME_PATH)
-}
 
-export const activateChrome = async () => {
-  return await run((CHROME_PATH: string) => {
-    const app = Application(CHROME_PATH)
-    app.activate()
-  }, CHROME_PATH)
+    if (appWindow.bounds) {
+      appWindow.bounds = { x: 0, y: 0, width: 1700, height: 1200 } // objでのsetが必要
+    } else {
+      appWindow.position = [0, 0]
+      appWindow.size = [1700, 1200]
+    }
+  }, appPath)
 }
 
 export const sleepOs = async () => {
