@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveVoice = exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.activateChrome = exports.resizeChrome = exports.showUiElementName = exports.fetchArgs = void 0;
+exports.saveVoice = exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.activateChrome = exports.resizeChrome = exports.activateApp = exports.showUiElementName = exports.fetchArgs = void 0;
 const run_1 = require("@jxa/run");
 const CHROME_PATH = '/Applications/_Web/Google Chrome.app';
 const Audio_MIDI_PATH = '/System/Applications/Utilities/Audio MIDI Setup.app';
@@ -38,6 +38,13 @@ const showUiElementName = async (appPath, filters = []) => {
     }, appPath, filters);
 };
 exports.showUiElementName = showUiElementName;
+const activateApp = async (appPath) => {
+    return await run_1.run((appPath) => {
+        const app = Application(appPath);
+        app.activate();
+    }, appPath);
+};
+exports.activateApp = activateApp;
 const resizeChrome = async () => {
     return await run_1.run((CHROME_PATH) => {
         const app = Application(CHROME_PATH);

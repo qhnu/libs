@@ -45,6 +45,13 @@ export const showUiElementName = async (appPath: string, filters: string[] = [])
   )
 }
 
+export const activateApp = async (appPath: string) => {
+  return await run((appPath: string) => {
+    const app = Application(appPath)
+    app.activate()
+  }, appPath)
+}
+
 export const resizeChrome = async () => {
   return await run((CHROME_PATH: string) => {
     const app = Application(CHROME_PATH)

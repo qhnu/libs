@@ -1,5 +1,6 @@
 export declare const fetchArgs: (args: any) => Promise<unknown>;
 export declare const showUiElementName: (appPath: string, filters?: string[]) => Promise<unknown>;
+export declare const activateApp: (appPath: string) => Promise<unknown>;
 export declare const resizeChrome: () => Promise<unknown>;
 export declare const activateChrome: () => Promise<unknown>;
 export declare const sleepOs: () => Promise<unknown>;
