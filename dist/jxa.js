@@ -223,14 +223,25 @@ exports.saveVoice = saveVoice;
 const launchFanControl = async () => {
     return await run_1.run((FAN_CONTROL_PATH) => {
         const app = Application(FAN_CONTROL_PATH);
+        if (app.running())
+            return;
         app.launch();
+        delay(0.25);
+        app.activate();
+        const process = Application('System Events').processes[app.name()];
+        process.windows
+            .byName('Macs Fan Control 1.5.9 Free (MacBookPro10,1)')
+            .groups.at(0)
+            .buttons.byName('メニューバーに隠す')
+            .click();
     }, FAN_CONTROL_PATH);
 };
 exports.launchFanControl = launchFanControl;
 const quitFanControl = async () => {
     return await run_1.run((FAN_CONTROL_PATH) => {
         const app = Application(FAN_CONTROL_PATH);
-        app.quit();
+        if (app.running())
+            app.quit();
     }, FAN_CONTROL_PATH);
 };
 exports.quitFanControl = quitFanControl;
