@@ -166,8 +166,8 @@ const setAudioMidi = async (output) => {
     }, Audio_MIDI_PATH, output);
 };
 exports.setAudioMidi = setAudioMidi;
-const saveVoice = async (type) => {
-    return await run_1.run((VOICE_PATH, type) => {
+const saveVoice = async (type, slide) => {
+    return await run_1.run((VOICE_PATH, type, slide) => {
         const app = Application(VOICE_PATH);
         if (!app.running()) {
             app.launch();
@@ -179,15 +179,14 @@ const saveVoice = async (type) => {
         window.position = [1750, 0];
         window.size = [750, 600];
         const systemEvents = Application('System Events');
-        switch (type) {
-            case 'F':
-                systemEvents.keystroke('0', { using: 'command down' });
-                break;
-            case 'M':
-                systemEvents.keystroke('1', { using: 'command down' });
-                break;
+        if (slide) {
+            process.menuBars
+                .at(0)
+                .menuBarItems.byName('ボイス設定')
+                .menus.byName('ボイス設定')
+                .menuItems.byName('次の設定に切り替え (⌘←)')
+                .click();
         }
-        delay(0.1);
         process.menuBars
             .at(0)
             .menuBarItems.byName('音声')
@@ -217,7 +216,7 @@ const saveVoice = async (type) => {
         const fileName = String(Date.now());
         systemEvents.keystroke(fileName);
         systemEvents.keyCode(52);
-    }, VOICE_PATH, type);
+    }, VOICE_PATH, type, slide);
 };
 exports.saveVoice = saveVoice;
 const launchFanControl = async () => {

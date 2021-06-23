@@ -13,6 +13,12 @@ export const fetchArgs = async (args: any) => {
   }, args)
 }
 
+// const process = Application('System Events').processes[app.name()]
+// for (const content of process.entireContents()) {
+//   const displayString = Automation.getDisplayString(content)
+//   console.log('menu=', displayString)
+// }
+
 export const showUiElementName = async (appPath: string, filters: string[] = []) => {
   return await run(
     (appPath: string, filters: string[]) => {
@@ -202,9 +208,9 @@ export const setAudioMidi = async (output: number) => {
   )
 }
 
-export const saveVoice = async (type: 'F' | 'M') => {
+export const saveVoice = async (type: 'F' | 'M', slide: boolean) => {
   return await run(
-    (VOICE_PATH: string, type: 'F' | 'M') => {
+    (VOICE_PATH: string, type: 'F' | 'M', slide: boolean) => {
       const app = Application(VOICE_PATH)
       if (!app.running()) {
         app.launch()
@@ -219,17 +225,19 @@ export const saveVoice = async (type: 'F' | 'M') => {
       window.size = [750, 600]
       // console.log('show properties', JSON.stringify(window.properties()))
 
-      // https://qiita.com/zakuroishikuro/items/afab0e33ad2030ba2f92#keycode
       const systemEvents = Application('System Events')
-      switch (type) {
-        case 'F':
-          systemEvents.keystroke('0', { using: 'command down' })
-          break
-        case 'M':
-          systemEvents.keystroke('1', { using: 'command down' })
-          break
+
+      if (slide) {
+        // UIエレメントとして認識されていない要素は、ショートカットキーも不可
+        // つまり、systemEvents.keystroke('0', { using: 'command down' }) は不可
+
+        process.menuBars
+          .at(0)
+          .menuBarItems.byName('ボイス設定')
+          .menus.byName('ボイス設定')
+          .menuItems.byName('次の設定に切り替え (⌘←)')
+          .click()
       }
-      delay(0.1)
 
       process.menuBars
         .at(0)
@@ -266,10 +274,12 @@ export const saveVoice = async (type: 'F' | 'M') => {
       const fileName = String(Date.now())
       systemEvents.keystroke(fileName) // 名称未設定.wavのの「名称未設定」が選択済みの状態で名称変更
 
+      // https://qiita.com/zakuroishikuro/items/afab0e33ad2030ba2f92#keycode
       systemEvents.keyCode(52) // 「return」キー
     },
     VOICE_PATH,
-    type
+    type,
+    slide
   )
 }
 
