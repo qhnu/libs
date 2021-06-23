@@ -4,6 +4,7 @@ import { run } from '@jxa/run'
 
 const Audio_MIDI_PATH = '/System/Applications/Utilities/Audio MIDI Setup.app'
 const VOICE_PATH = '/Applications/_Video/MYukkuriVoice-darwin-x64/MYukkuriVoice.app'
+const FAN_CONTROL_PATH = '/Applications/_Video/Macs Fan Control.app'
 
 export const fetchArgs = async (args: any) => {
   return await run((args: any) => {
@@ -201,57 +202,87 @@ export const setAudioMidi = async (output: number) => {
   )
 }
 
-export const saveVoice = async () => {
-  return await run((VOICE_PATH: string) => {
-    const app = Application(VOICE_PATH)
-    if (!app.running()) {
-      app.launch()
-      delay(1)
-    }
-    app.activate()
+export const saveVoice = async (type: 'F' | 'M') => {
+  return await run(
+    (VOICE_PATH: string, type: 'F' | 'M') => {
+      const app = Application(VOICE_PATH)
+      if (!app.running()) {
+        app.launch()
+        delay(1)
+      }
+      app.activate()
 
-    const process = Application('System Events').processes[app.name()]
+      const process = Application('System Events').processes[app.name()]
 
-    const window = process.windows[0]
-    window.position = [1750, 0]
-    window.size = [750, 600]
-    // console.log('show properties', JSON.stringify(window.properties()))
+      const window = process.windows[0]
+      window.position = [1750, 0]
+      window.size = [750, 600]
+      // console.log('show properties', JSON.stringify(window.properties()))
 
-    process.menuBars
-      .at(0)
-      .menuBarItems.byName('音声')
-      .menus.byName('音声')
-      .menuItems.byName('入力をクリア')
-      .click()
-    process.menuBars
-      .at(0)
-      .menuBarItems.byName('音声')
-      .menus.byName('音声')
-      .menuItems.byName('クリップボードからコピー (⌘D)')
-      .click()
+      // https://qiita.com/zakuroishikuro/items/afab0e33ad2030ba2f92#keycode
+      const systemEvents = Application('System Events')
+      switch (type) {
+        case 'F':
+          systemEvents.keystroke('0', { using: 'command down' })
+          break
+        case 'M':
+          systemEvents.keystroke('1', { using: 'command down' })
+          break
+      }
+      delay(0.1)
 
-    process.menuBars
-      .at(0)
-      .menuBarItems.byName('音声')
-      .menus.byName('音声')
-      .menuItems.byName('音記号列に変換 (⌘→)')
-      .click()
-    process.menuBars
-      .at(0)
-      .menuBarItems.byName('音声')
-      .menus.byName('音声')
-      .menuItems.byName('音声の保存 (⌘S)')
-      .click()
+      process.menuBars
+        .at(0)
+        .menuBarItems.byName('音声')
+        .menus.byName('音声')
+        .menuItems.byName('入力をクリア')
+        .click()
 
-    delay(0.5)
+      process.menuBars
+        .at(0)
+        .menuBarItems.byName('音声')
+        .menus.byName('音声')
+        .menuItems.byName('クリップボードからコピー (⌘D)')
+        .click()
 
-    // https://qiita.com/zakuroishikuro/items/afab0e33ad2030ba2f92#keycode
-    const systemEvents = Application('System Events')
-    systemEvents.keyCode(102) // 「英数」キー
+      process.menuBars
+        .at(0)
+        .menuBarItems.byName('音声')
+        .menus.byName('音声')
+        .menuItems.byName('音記号列に変換 (⌘→)')
+        .click()
 
-    const fileName = String(Date.now())
-    systemEvents.keystroke(fileName) // 名称未設定.wavのの「名称未設定」が選択済みの状態で名称変更
+      process.menuBars
+        .at(0)
+        .menuBarItems.byName('音声')
+        .menus.byName('音声')
+        .menuItems.byName('音声の保存 (⌘S)')
+        .click()
 
-    systemEvents.keyCode(52) // 「return」キー
-  }, VOICE_PATH)
+      systemEvents.keyCode(102) // 「英数」キー
+
+      delay(0.5)
+
+      const fileName = String(Date.now())
+      systemEvents.keystroke(fileName) // 名称未設定.wavのの「名称未設定」が選択済みの状態で名称変更
+
+      systemEvents.keyCode(52) // 「return」キー
+    },
+    VOICE_PATH,
+    type
+  )
+}
+
+export const launchFanControl = async () => {
+  return await run((FAN_CONTROL_PATH: string) => {
+    const app = Application(FAN_CONTROL_PATH)
+    app.launch()
+  }, FAN_CONTROL_PATH)
+}
+
+export const quitFanControl = async () => {
+  return await run((FAN_CONTROL_PATH: string) => {
+    const app = Application(FAN_CONTROL_PATH)
+    app.quit()
+  }, FAN_CONTROL_PATH)
 }

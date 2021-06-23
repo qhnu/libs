@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveVoice = exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.resizeApp = exports.activateApp = exports.showUiElementName = exports.fetchArgs = void 0;
+exports.quitFanControl = exports.launchFanControl = exports.saveVoice = exports.setAudioMidi = exports.switchBlackHoleOutput = exports.sleepOs = exports.resizeApp = exports.activateApp = exports.showUiElementName = exports.fetchArgs = void 0;
 const run_1 = require("@jxa/run");
 const Audio_MIDI_PATH = '/System/Applications/Utilities/Audio MIDI Setup.app';
 const VOICE_PATH = '/Applications/_Video/MYukkuriVoice-darwin-x64/MYukkuriVoice.app';
+const FAN_CONTROL_PATH = '/Applications/_Video/Macs Fan Control.app';
 const fetchArgs = async (args) => {
     return await run_1.run((args) => {
         const payload = args;
@@ -165,8 +166,8 @@ const setAudioMidi = async (output) => {
     }, Audio_MIDI_PATH, output);
 };
 exports.setAudioMidi = setAudioMidi;
-const saveVoice = async () => {
-    return await run_1.run((VOICE_PATH) => {
+const saveVoice = async (type) => {
+    return await run_1.run((VOICE_PATH, type) => {
         const app = Application(VOICE_PATH);
         if (!app.running()) {
             app.launch();
@@ -177,6 +178,16 @@ const saveVoice = async () => {
         const window = process.windows[0];
         window.position = [1750, 0];
         window.size = [750, 600];
+        const systemEvents = Application('System Events');
+        switch (type) {
+            case 'F':
+                systemEvents.keystroke('0', { using: 'command down' });
+                break;
+            case 'M':
+                systemEvents.keystroke('1', { using: 'command down' });
+                break;
+        }
+        delay(0.1);
         process.menuBars
             .at(0)
             .menuBarItems.byName('音声')
@@ -201,12 +212,25 @@ const saveVoice = async () => {
             .menus.byName('音声')
             .menuItems.byName('音声の保存 (⌘S)')
             .click();
-        delay(0.5);
-        const systemEvents = Application('System Events');
         systemEvents.keyCode(102);
+        delay(0.5);
         const fileName = String(Date.now());
         systemEvents.keystroke(fileName);
         systemEvents.keyCode(52);
-    }, VOICE_PATH);
+    }, VOICE_PATH, type);
 };
 exports.saveVoice = saveVoice;
+const launchFanControl = async () => {
+    return await run_1.run((FAN_CONTROL_PATH) => {
+        const app = Application(FAN_CONTROL_PATH);
+        app.launch();
+    }, FAN_CONTROL_PATH);
+};
+exports.launchFanControl = launchFanControl;
+const quitFanControl = async () => {
+    return await run_1.run((FAN_CONTROL_PATH) => {
+        const app = Application(FAN_CONTROL_PATH);
+        app.quit();
+    }, FAN_CONTROL_PATH);
+};
+exports.quitFanControl = quitFanControl;
