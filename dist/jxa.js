@@ -179,13 +179,15 @@ const saveVoice = async (type, slide) => {
         window.position = [1750, 0];
         window.size = [750, 600];
         const systemEvents = Application('System Events');
-        if (slide) {
+        let currSlide = slide;
+        while (currSlide > 0) {
             process.menuBars
                 .at(0)
                 .menuBarItems.byName('ボイス設定')
                 .menus.byName('ボイス設定')
                 .menuItems.byName('次の設定に切り替え (⌘←)')
                 .click();
+            currSlide--;
         }
         process.menuBars
             .at(0)

@@ -208,9 +208,9 @@ export const setAudioMidi = async (output: number) => {
   )
 }
 
-export const saveVoice = async (type: 'F' | 'M', slide: boolean) => {
+export const saveVoice = async (type: 'F' | 'M', slide: number) => {
   return await run(
-    (VOICE_PATH: string, type: 'F' | 'M', slide: boolean) => {
+    (VOICE_PATH: string, type: 'F' | 'M', slide: number) => {
       const app = Application(VOICE_PATH)
       if (!app.running()) {
         app.launch()
@@ -227,16 +227,18 @@ export const saveVoice = async (type: 'F' | 'M', slide: boolean) => {
 
       const systemEvents = Application('System Events')
 
-      if (slide) {
-        // UIエレメントとして認識されていない要素は、ショートカットキーも不可
-        // つまり、systemEvents.keystroke('0', { using: 'command down' }) は不可
+      // UIエレメントとして認識されていない要素は、ショートカットキーも不可
+      // つまり、systemEvents.keystroke('0', { using: 'command down' }) は不可
 
+      let currSlide = slide
+      while (currSlide > 0) {
         process.menuBars
           .at(0)
           .menuBarItems.byName('ボイス設定')
           .menus.byName('ボイス設定')
           .menuItems.byName('次の設定に切り替え (⌘←)')
           .click()
+        currSlide--
       }
 
       process.menuBars
