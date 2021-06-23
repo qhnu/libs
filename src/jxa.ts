@@ -208,9 +208,9 @@ export const setAudioMidi = async (output: number) => {
   )
 }
 
-export const saveVoice = async (type: 'F' | 'M', slide: number) => {
+export const saveVoice = async (slide: number) => {
   return await run(
-    (VOICE_PATH: string, type: 'F' | 'M', slide: number) => {
+    (VOICE_PATH: string, slide: number) => {
       const app = Application(VOICE_PATH)
       if (!app.running()) {
         app.launch()
@@ -280,7 +280,6 @@ export const saveVoice = async (type: 'F' | 'M', slide: number) => {
       systemEvents.keyCode(52) // 「return」キー
     },
     VOICE_PATH,
-    type,
     slide
   )
 }

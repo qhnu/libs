@@ -166,8 +166,8 @@ const setAudioMidi = async (output) => {
     }, Audio_MIDI_PATH, output);
 };
 exports.setAudioMidi = setAudioMidi;
-const saveVoice = async (type, slide) => {
-    return await run_1.run((VOICE_PATH, type, slide) => {
+const saveVoice = async (slide) => {
+    return await run_1.run((VOICE_PATH, slide) => {
         const app = Application(VOICE_PATH);
         if (!app.running()) {
             app.launch();
@@ -218,7 +218,7 @@ const saveVoice = async (type, slide) => {
         const fileName = String(Date.now());
         systemEvents.keystroke(fileName);
         systemEvents.keyCode(52);
-    }, VOICE_PATH, type, slide);
+    }, VOICE_PATH, slide);
 };
 exports.saveVoice = saveVoice;
 const launchFanControl = async () => {
