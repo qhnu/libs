@@ -1,6 +1,6 @@
 {
   "name": "@qhnu/libs",
-  "version": "2.0.71",
+  "version": "2.0.72",
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog-ja"

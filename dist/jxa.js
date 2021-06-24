@@ -214,7 +214,7 @@ const saveVoice = async (slide) => {
             .menuItems.byName('音声の保存 (⌘S)')
             .click();
         systemEvents.keyCode(102);
-        delay(0.5);
+        delay(0.75);
         const fileName = String(Date.now());
         systemEvents.keystroke(fileName);
         systemEvents.keyCode(52);
